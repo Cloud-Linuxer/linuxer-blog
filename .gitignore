@@ -28,3 +28,9 @@ Thumbs.db
 # Temporary files
 tmp/
 temp/
+
+# Migration scripts with credentials
+migration/
+*.log
+/tmp/
+.DS_Store

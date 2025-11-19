@@ -9,16 +9,8 @@ aliases:
   - /public-cloud-status/
 ---
 
-\n
-
-\n
 
 Amazon Web Services Service Status
 
-\n
-
-\n\n\n\n\n\n
 
 Google Cloud Platform Service Status
-
-\n\n\n

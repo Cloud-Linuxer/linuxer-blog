@@ -9,46 +9,35 @@ aliases:
   - /cloudnet-aws%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%82%b9-%ea%b0%95%ec%9d%98-%eb%82%98%eb%88%94%ec%9d%b4%eb%b2%a4%ed%8a%b8/
 ---
 
-\n
 
 이번에 CLOUDNET@ 에서 인프런에 강의를 오픈했다.
 
-\n\n\n\n
 
 <https://inf.run/Xpv1>
 
-\n\n\n\n
 
 1호 영업사원으로 뛰기로 말한 전적이 있기에 추첨으로 강의 나눔 이벤트를 했
 
-\n\n\n\n
 
 총 60분이 참여해주셨고, 간단하게 코드를 짰다.
 
-\n\n\n\n
 
 ```
-import random\n\ndef select_random_winner(filename):\n    with open(filename, 'r', encoding='utf-8') as file:\n        names = file.readlines()\n\n    winner = random.choice(names).strip()\n    return winner\n\nfilename = "name_list.txt"\nwinner = select_random_winner(filename)\nprint(f"축하합니다! 상품 당첨자는 {winner}님입니다!")
+import random \ndef select_random_winner(filename):\n    with open(filename, 'r', encoding='utf-8') as file:\n        names = file.readlines() \n    winner = random.choice(names).strip()\n    return winner \nfilename = "name_list.txt" winner = select_random_winner(filename) print(f"축하합니다! 상품 당첨자는 {winner}님입니다!")
 ```
 
-\n\n\n\n
 
 랜덤으로 코드만들어서 돌렸다.
 
-\n\n\n\n
 
 ```
-python3 select_random_winner.py\n축하합니다! 상품 당첨자는 김신님입니다!
+python3 select_random_winner.py 축하합니다! 상품 당첨자는 김신님입니다!
 ```
 
-\n\n\n\n
+
 ![](/images/2023/04/image-2.png)
-\n\n\n\n
 
 김신님께서 당첨되셨다.
 
-\n\n\n\n\n\n\n\n
 
 축하합니다!
-
-\n

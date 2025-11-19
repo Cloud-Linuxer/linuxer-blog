@@ -9,66 +9,50 @@ aliases:
   - /eks-nodeless-07-aws-karpenter-crd/
 ---
 
-\n
 
 이제 카펜터의 CRD를 정리하고 어떻게 사용해야 하는지 이야기를 해보려고 한다. 거의 끝에 다왔다.
 
-\n\n\n\n
 
-\nhttps://linuxer.name/2023/05/eks-nodeless-05-aws-karpenter-component/\n
+https://linuxer.name/2023/05/eks-nodeless-05-aws-karpenter-component/
 
-\n\n\n\n
 
 Karpenter Component 를 설명할때 CRD를 설명했었다.
 
-\n\n\n\n
 
 다시 이야기 하자면 **provisioners.karpenter.sh** - **`provisioners`** - / **awsnodetemplates.karpenter.k8s.aws** -**`awsnodetemplates`** - 두가지를 셋팅해야 한다.
 
-\n\n\n\n
 
 먼저 **`provisioners`** 를 이야기 해볼까 한다.
 
-\n\n\n\n
 
 ```
-apiVersion: karpenter.sh/v1alpha5\nkind: Provisioner\nmetadata:\n  name: default\nspec:\n  requirements:\n    - key: karpenter.k8s.aws/instance-category\n      operator: In\n      values: [c, m, r]\n    - key: karpenter.k8s.aws/instance-generation\n      operator: Gt\n      values: ["2"]\n  providerRef:\n    name: default
+apiVersion: karpenter.sh/v1alpha5 kind: Provisioner metadata:\n  name: default spec:\n  requirements:\n    - key: karpenter.k8s.aws/instance-category\n      operator: In\n      values: [c, m, r]\n    - key: karpenter.k8s.aws/instance-generation\n      operator: Gt\n      values: ["2"]\n  providerRef:\n    name: default
 ```
 
-\n\n\n\n
 
 <https://karpenter.sh/v0.27.3/concepts/provisioners/>
 
-\n\n\n\n
 
 <https://github.com/aws/karpenter/tree/main/examples>
 
-\n\n\n\n
 
 **`provisioners`** 의 사용은 이 두가지 링크를 참고하면 대부분 할수있는데, 간단하게 **`provisioners`**를 설명하자면 노드를 만들기 위한 조건을 정의하는거다.
 
-\n\n\n\n
 
 예를 들자면 인스턴스 페밀리 / 인스턴스 CPU 갯수 / 하이퍼바이저 유형 / AZ / kubeletConfiguration 등을 설정할수 있다. 프로비저너는 노드를 생성하고 관리하는데 사용되는 CRD다
 
-\n\n\n\n\n\n\n\n
 
 <https://karpenter.sh/v0.27.5/concepts/node-templates/>
 
-\n\n\n\n
 
 ```
-apiVersion: karpenter.k8s.aws/v1alpha1\nkind: AWSNodeTemplate\nmetadata:\n  name: default\nspec:\n  subnetSelector:\n    karpenter.sh/discovery: "${CLUSTER_NAME}"\n  securityGroupSelector:\n    karpenter.sh/discovery: "${CLUSTER_NAME}"
+apiVersion: karpenter.k8s.aws/v1alpha1 kind: AWSNodeTemplate metadata:\n  name: default spec:\n  subnetSelector:\n    karpenter.sh/discovery: "${CLUSTER_NAME}"\n  securityGroupSelector:\n    karpenter.sh/discovery: "${CLUSTER_NAME}"
 ```
 
-\n\n\n\n
 
-**`awsnodetemplates`** 은 필수 요소들이 있다. 그것이 Subnet / SecurityGroup 다.  
-서브넷 셀렉터는 subnet-id 혹은 서브넷에 연결된 특정 태그로 동작한다.  
+**`awsnodetemplates`** 은 필수 요소들이 있다. 그것이 Subnet / SecurityGroup 다.
+서브넷 셀렉터는 subnet-id 혹은 서브넷에 연결된 특정 태그로 동작한다.
 보안그룹또한 ID혹은 특정 태그다.
 
-\n\n\n\n
 
 **`awsnodetemplates`**은 ami / userdata ebs 등들을 컨트롤하려 원하는 노드의 OS를 선택할수도 있다.
-
-\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
