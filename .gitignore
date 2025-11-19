@@ -1,0 +1,30 @@
+# Hugo
+/public/
+/resources/_gen/
+/.hugo_build.lock
+
+# Migration files
+/migration/
+/wordpress-export.xml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment files
+.env
+.env.local
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/

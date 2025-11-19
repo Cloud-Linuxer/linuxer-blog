@@ -1,0 +1,34 @@
+baseURL = 'https://linuxer.name/'
+languageCode = 'ko-kr'
+title = 'Linuxer Blog'
+theme = 'PaperMod'
+
+[params]
+  ShowCodeCopyButtons = true
+  ShowReadingTime = true
+  ShowBreadCrumbs = true
+  ShowPostNavLinks = true
+  ShowShareButtons = false
+  ShowToc = true
+  TocOpen = false
+
+[params.homeInfoParams]
+  Title = "Linuxer Blog"
+  Content = "AWS, Linux, Kubernetes 기술 블로그"
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/Cloud-Linuxer"
+
+[markup.highlight]
+  codeFences = true
+  guessSyntax = true
+  lineNos = false
+  style = "monokai"
+
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
