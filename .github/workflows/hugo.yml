@@ -3,7 +3,7 @@ name: Deploy Hugo site to AWS S3
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 permissions:
@@ -43,7 +43,7 @@ jobs:
           hugo \
             --gc \
             --minify \
-            --baseURL "https://linuxer.name/"
+            --baseURL "https://hugo.linuxer.name/"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

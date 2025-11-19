@@ -1,4 +1,4 @@
-baseURL = 'https://linuxer.name/'
+baseURL = 'https://hugo.linuxer.name/'
 languageCode = 'ko-kr'
 title = 'Linuxer Blog'
 theme = 'PaperMod'
