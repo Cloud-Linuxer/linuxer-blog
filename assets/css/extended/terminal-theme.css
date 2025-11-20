@@ -559,10 +559,15 @@ code, pre, kbd, samp {
     font-weight: 600;
 }
 
-/* Hide code in previews */
+/* Hide code blocks completely in previews (including line numbers) */
 .entry-content code,
-.entry-content pre {
-    display: none;
+.entry-content pre,
+.entry-content .highlight,
+.entry-content .chroma,
+.entry-content .lntable,
+.entry-content .lnt,
+.entry-content .ln {
+    display: none !important;
 }
 
 /* Scan line animation overlay (subtle) */

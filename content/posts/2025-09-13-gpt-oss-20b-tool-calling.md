@@ -19,7 +19,8 @@ GPU: NVIDIA GeForce RTX 5090 (32GB VRAM, CUDA 12.9)
 Storage: 1.9TB (1.5TB available)
 OS: Fedora Linux 42 Server Edition
 Kernel: 6.15.10
-```bash
+```
+
 이스펙으로 gpt-oss-20b 모델을 구동하고 테스트했다.
 그냥 단순 부하 테스트로는 gpt-oss-20b 모델을 vllm 으로 실행했을때 90rps 까지 처리하고 초당 토큰을 생성하는 속도는 4000토큰 정도 생성했다.
 4000 token/s 라는 이야기다.

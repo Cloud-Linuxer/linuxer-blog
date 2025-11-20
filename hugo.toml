@@ -49,8 +49,8 @@ theme = 'PaperMod'
 [markup.highlight]
   codeFences = true
   guessSyntax = true
-  lineNos = true
-  lineNumbersInTable = true
+  lineNos = false
+  lineNumbersInTable = false
   style = "dracula"
 
 [taxonomies]
