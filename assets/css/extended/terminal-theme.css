@@ -615,3 +615,96 @@ code, pre, kbd, samp {
     position: relative;
     z-index: 2;
 }
+
+/* Light mode styles */
+[data-theme="light"] body {
+    font-family: 'IBM Plex Sans KR', -apple-system, sans-serif !important;
+    line-height: 1.7 !important;
+}
+
+[data-theme="light"] h1, 
+[data-theme="light"] h2, 
+[data-theme="light"] h3, 
+[data-theme="light"] h4, 
+[data-theme="light"] h5, 
+[data-theme="light"] h6 {
+    font-family: 'IBM Plex Mono', monospace !important;
+}
+
+[data-theme="light"] code, 
+[data-theme="light"] pre {
+    font-family: 'IBM Plex Mono', 'Consolas', monospace !important;
+}
+
+[data-theme="light"] .logo a::before {
+    content: "~/linuxer$ ";
+    color: #0066cc;
+    font-weight: normal;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+[data-theme="light"] .post-entry::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 28px;
+    background: linear-gradient(180deg, #f0f0f0 0%, #e8e8e8 100%);
+    border-bottom: 1px solid #d0d0d0;
+    pointer-events: none;
+}
+
+[data-theme="light"] .post-entry::after {
+    content: '● ● ●';
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    font-size: 10px;
+    color: #999;
+    letter-spacing: 4px;
+    pointer-events: none;
+}
+
+[data-theme="light"] .post-entry .entry-header {
+    margin-top: 36px;
+}
+
+[data-theme="light"] #menu a {
+    font-family: 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+}
+
+[data-theme="light"] pre::before {
+    content: '';
+    display: block;
+    height: 36px;
+    background: linear-gradient(180deg, #f0f0f0 0%, #e8e8e8 100%);
+    border-bottom: 1px solid #d0d0d0;
+}
+
+[data-theme="light"] pre::after {
+    content: '● ● ●';
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    font-size: 11px;
+    color: #999;
+    letter-spacing: 6px;
+}
+
+[data-theme="light"] pre {
+    border: 2px solid #d0d0d0;
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    margin: 2em 0;
+}
+
+[data-theme="light"] pre code {
+    display: block;
+    padding: 1.5em;
+}
