@@ -65,7 +65,7 @@ code, pre, kbd, samp {
 }
 
 [data-theme="dark"] .logo a::before {
-    content: "linuxer# ";
+    content: "linuxer# cd /blog && ";
     color: var(--terminal-green);
     font-weight: 400;
     text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
@@ -637,7 +637,7 @@ code, pre, kbd, samp {
 }
 
 [data-theme="light"] .logo a::before {
-    content: "linuxer# ";
+    content: "linuxer# cd /blog && ";
     color: #0066cc;
     font-weight: normal;
     font-family: 'IBM Plex Mono', monospace;
