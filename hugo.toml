@@ -19,8 +19,8 @@ theme = 'PaperMod'
   summaryLength = 70
 
 [params.homeInfoParams]
-  Title = "Linuxer Blog"
-  Content = "AWS, Linux, Kubernetes 기술 블로그"
+  Title = ""
+  Content = "리눅서의 기술 블로그"
 
 [[params.socialIcons]]
   name = "github"
