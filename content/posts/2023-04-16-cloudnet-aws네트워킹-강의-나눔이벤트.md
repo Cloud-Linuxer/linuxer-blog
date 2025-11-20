@@ -12,32 +12,30 @@ aliases:
 
 이번에 CLOUDNET@ 에서 인프런에 강의를 오픈했다.
 
-
 <https://inf.run/Xpv1>
-
 
 1호 영업사원으로 뛰기로 말한 전적이 있기에 추첨으로 강의 나눔 이벤트를 했
 
-
 총 60분이 참여해주셨고, 간단하게 코드를 짰다.
 
-
 ```
-import random \ndef select_random_winner(filename):\n    with open(filename, 'r', encoding='utf-8') as file:\n        names = file.readlines() \n    winner = random.choice(names).strip()\n    return winner \nfilename = "name_list.txt" winner = select_random_winner(filename) print(f"축하합니다! 상품 당첨자는 {winner}님입니다!")
+import random
+def select_random_winner(filename):
+    with open(filename, 'r', encoding='utf-8') as file:
+        names = file.readlines()
+    winner = random.choice(names).strip()
+    return winner
+filename = "name_list.txt" winner = select_random_winner(filename) print(f"축하합니다! 상품 당첨자는 {winner}님입니다!")
 ```
-
 
 랜덤으로 코드만들어서 돌렸다.
-
 
 ```
 python3 select_random_winner.py 축하합니다! 상품 당첨자는 김신님입니다!
 ```
 
-
 ![](/images/2023/04/image-2.png)
 
 김신님께서 당첨되셨다.
-
 
 축하합니다!

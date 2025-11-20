@@ -12,5 +12,4 @@ aliases:
 
 Amazon Web Services Service Status
 
-
 Google Cloud Platform Service Status

@@ -15,5 +15,4 @@ aws bucket ls | xargs -L1 % aws s3api put-bucket-encryption \\
 --bucket % \\
 --server-side-encryption-configuration '{"Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]}'
 
-
 s3 api 이용한 모든버킷 AES-256 암호화.

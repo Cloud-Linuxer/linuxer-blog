@@ -14,9 +14,6 @@ aliases:
 
 win key -> cmd
 
-
 ssh 명령어 지원.
 
-
 ![](/images/2020/10/image-15.png)
-

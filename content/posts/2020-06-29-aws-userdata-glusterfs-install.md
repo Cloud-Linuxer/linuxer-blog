@@ -26,8 +26,6 @@ sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/sysconfig/selinux && cat /etc/sys
 echo "\* hard nofile 65535" >> /etc/security/limits.conf
 chmod 744 /etc/rc.d/rc.local
 
-
 ec2 userdata glusterfs install 스크립트 입니다.
-
 
 <https://wiki.centos.org/SpecialInterestGroup/Storage/gluster-Quickstart>
