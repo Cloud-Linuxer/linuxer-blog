@@ -746,6 +746,19 @@ code, pre, kbd, samp {
 }
 
 /* Fix: Complete click-through solution */
+
+/* CRITICAL: Define entry-link base styles (missing from build) */
+.entry-link {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+}
+
 /* Step 1: Disable clicks on ALL children except entry-link */
 [data-theme="dark"] .post-entry * {
     pointer-events: none !important;
