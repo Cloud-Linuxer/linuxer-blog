@@ -43,7 +43,7 @@ jobs:
           hugo \
             --gc \
             --minify \
-            --baseURL "https://hugo.linuxer.name/"
+            --baseURL "https://linuxer.name/"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
