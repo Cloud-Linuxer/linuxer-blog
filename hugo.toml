@@ -23,8 +23,9 @@ theme = 'PaperMod'
 [markup.highlight]
   codeFences = true
   guessSyntax = true
-  lineNos = false
-  style = "monokai"
+  lineNos = true
+  lineNumbersInTable = true
+  style = "dracula"
 
 [taxonomies]
   category = 'categories'
