@@ -152,7 +152,6 @@ code, pre, kbd, samp {
     border-radius: 8px;
     position: relative;
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme="dark"] .post-entry::before {
@@ -182,25 +181,12 @@ code, pre, kbd, samp {
     margin-top: 36px;
 }
 
-[data-theme="dark"] .post-entry:hover {
-    border-color: var(--terminal-green);
-    box-shadow: 0 8px 24px rgba(0, 255, 65, 0.15),
-                inset 0 0 60px rgba(0, 255, 65, 0.02);
-    transform: translateY(-4px) scale(1.01);
-}
-
 /* Post titles with matrix effect */
 [data-theme="dark"] .post-entry h2 {
     color: var(--text-primary);
     font-family: 'IBM Plex Mono', monospace;
     font-weight: 600;
     font-size: 20px;
-    transition: all 0.3s ease;
-}
-
-[data-theme="dark"] .post-entry:hover h2 {
-    color: var(--terminal-green);
-    text-shadow: 0 0 12px rgba(0, 255, 65, 0.4);
 }
 
 /* Code blocks - enhanced terminal windows */
