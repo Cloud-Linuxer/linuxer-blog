@@ -12,7 +12,7 @@ AWS, Linux, Kubernetes 기술 블로그를 운영하는 성실한 운영자입�
 
 ## 👨‍💻 경력
 
-- **Theorder** (2024 - 현재)
+- **t'order** (2024 - 현재)
 - **Milli's Library** (2022 - 2024) - DevOps Engineer Team Lead
 - **NaverCloud** (2021 - 2022) - Cloud Solutions Architect
 - **Hostcenter** (2010 - 2021) - System Engineer, Solutions Architect
