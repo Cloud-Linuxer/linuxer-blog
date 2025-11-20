@@ -11,6 +11,9 @@ theme = 'PaperMod'
   ShowShareButtons = false
   ShowToc = true
   TocOpen = false
+  displayFullLangName = true
+  hideMeta = false
+  hideMetaInList = false
 
 [params.homeInfoParams]
   Title = "Linuxer Blog"
