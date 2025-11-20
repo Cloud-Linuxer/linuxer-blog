@@ -775,19 +775,8 @@ code, pre, kbd, samp {
     pointer-events: none;
 }
 
-/* Allow text selection in children */
-[data-theme="dark"] .post-entry h2,
-[data-theme="dark"] .post-entry p {
-    pointer-events: auto;
-}
-
 [data-theme="light"] .post-entry .entry-header,
 [data-theme="light"] .post-entry .entry-content,
 [data-theme="light"] .post-entry .entry-footer {
     pointer-events: none;
-}
-
-[data-theme="light"] .post-entry h2,
-[data-theme="light"] .post-entry p {
-    pointer-events: auto;
 }
