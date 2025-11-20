@@ -12,7 +12,13 @@ aliases:
 
 
 ```
-System Specifications CPU: AMD Ryzen 9 9950X3D 16-Core (32 threads, up to 5.75 GHz) RAM: 60GB GPU: NVIDIA GeForce RTX 5090 (32GB VRAM, CUDA 12.9) Storage: 1.9TB (1.5TB available) OS: Fedora Linux 42 Server Edition Kernel: 6.15.10
+System Specifications
+CPU: AMD Ryzen 9 9950X3D 16-Core (32 threads, up to 5.75 GHz)
+RAM: 60GB
+GPU: NVIDIA GeForce RTX 5090 (32GB VRAM, CUDA 12.9)
+Storage: 1.9TB (1.5TB available)
+OS: Fedora Linux 42 Server Edition
+Kernel: 6.15.10
 ```
 
 이스펙으로 gpt-oss-20b 모델을 구동하고 테스트했다.
