@@ -42,6 +42,9 @@ code, pre, kbd, samp {
 
 /* Dark mode base */
 .dark {
+}
+
+:root[data-theme=dark] {
     --theme: var(--bg-black) !important;
     --entry: var(--bg-dark) !important;
     --primary: var(--text-primary) !important;
