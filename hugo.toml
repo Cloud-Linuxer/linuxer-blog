@@ -14,6 +14,8 @@ theme = 'PaperMod'
   displayFullLangName = true
   hideMeta = false
   hideMetaInList = false
+  defaultTheme = "dark"
+  disableThemeToggle = false
 
 [params.homeInfoParams]
   Title = "Linuxer Blog"
