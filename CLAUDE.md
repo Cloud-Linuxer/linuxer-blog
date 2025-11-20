@@ -26,6 +26,39 @@ hugo server --bind 0.0.0.0 --port 1313 --disableFastRender
 hugo --gc --minify --baseURL "https://www.linuxer.name/"
 ```
 
+### **CRITICAL: Pre-Push Testing Rule**
+
+**NEVER push to main without passing local tests:**
+
+```bash
+# 1. Clean rebuild
+pkill hugo && rm -rf public resources
+hugo --minify
+
+# 2. Start local server
+hugo server --bind 127.0.0.1 --port 1313 --disableFastRender > /tmp/hugo.log 2>&1 &
+sleep 4
+
+# 3. Verify build success
+curl -s http://localhost:1313/ | head -50
+
+# 4. Take screenshots for verification
+chromium-browser --headless --disable-gpu --no-sandbox \
+  --screenshot=/tmp/test_dark.png --window-size=1920,1080 \
+  "http://localhost:1313/"
+
+# 5. Manual verification checklist:
+# - Does the design look correct in screenshot?
+# - Are all visual elements (prompt, colors, fonts) working?
+# - Can you see post cards with ● ● ● decorations?
+# - Is rainbow gradient visible on prompt?
+
+# 6. Only if ALL tests pass:
+git add -A && git commit -m "..." && git push origin main
+```
+
+**If ANY test fails, fix issues before pushing.**
+
 ### Content Management
 ```bash
 # Create new post
