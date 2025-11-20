@@ -655,11 +655,42 @@ code, pre, kbd, samp {
     font-family: 'IBM Plex Mono', 'Consolas', monospace !important;
 }
 
+[data-theme="light"] .logo a {
+    font-size: 0;
+}
+
 [data-theme="light"] .logo a::before {
     content: "linuxer# cd /blog ";
-    color: #0066cc;
-    font-weight: normal;
+    background: linear-gradient(90deg,
+        #ff0066 0%,
+        #ff3366 7%,
+        #ff6600 14%,
+        #ffcc00 21%,
+        #ccff00 28%,
+        #66ff00 35%,
+        #00ff66 42%,
+        #00ffcc 50%,
+        #00ccff 57%,
+        #0066ff 64%,
+        #3333ff 71%,
+        #6600ff 78%,
+        #cc00ff 85%,
+        #ff00cc 92%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+    font-size: 20px;
     font-family: 'IBM Plex Mono', monospace;
+}
+
+[data-theme="light"] .logo a::after {
+    content: "▊";
+    color: #66ff00;
+    animation: blink 1.2s infinite;
+    margin-left: 4px;
+    font-size: 20px;
 }
 
 [data-theme="light"] .post-entry::before {
