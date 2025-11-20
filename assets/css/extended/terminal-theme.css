@@ -62,13 +62,32 @@ code, pre, kbd, samp {
     font-family: 'IBM Plex Mono', monospace;
     font-weight: 500;
     position: relative;
+    font-size: 0;
 }
 
 [data-theme="dark"] .logo a::before {
-    content: "linuxer# cd /blog && ";
-    color: var(--terminal-green);
-    font-weight: 400;
-    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    content: "linuxer# cd /blog ";
+    background: linear-gradient(90deg,
+        #ff0066 0%,    /* Pink-Red */
+        #ff3366 7%,    /* Pink */
+        #ff6600 14%,   /* Orange */
+        #ffcc00 21%,   /* Yellow-Orange */
+        #ccff00 28%,   /* Yellow-Green */
+        #66ff00 35%,   /* Green */
+        #00ff66 42%,   /* Cyan-Green */
+        #00ffcc 50%,   /* Cyan */
+        #00ccff 57%,   /* Light Blue */
+        #0066ff 64%,   /* Blue */
+        #3333ff 71%,   /* Purple-Blue */
+        #6600ff 78%,   /* Purple */
+        #cc00ff 85%,   /* Magenta */
+        #ff00cc 92%    /* Pink-Magenta */
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+    font-size: 20px;
 }
 
 [data-theme="dark"] .logo a::after {
@@ -637,7 +656,7 @@ code, pre, kbd, samp {
 }
 
 [data-theme="light"] .logo a::before {
-    content: "linuxer# cd /blog && ";
+    content: "linuxer# cd /blog ";
     color: #0066cc;
     font-weight: normal;
     font-family: 'IBM Plex Mono', monospace;
