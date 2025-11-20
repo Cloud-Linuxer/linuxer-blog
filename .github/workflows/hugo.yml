@@ -55,7 +55,6 @@ jobs:
         run: |
           aws s3 sync ./public/ s3://linuxer-blog --delete --cache-control "max-age=3600"
 
-      - name: Invalidate CloudFront (optional)
+      - name: Invalidate CloudFront
         run: |
-          echo "CloudFront invalidation can be added here if needed"
-          # aws cloudfront create-invalidation --distribution-id YOUR_DISTRIBUTION_ID --paths "/*"
+          aws cloudfront create-invalidation --distribution-id E2F55V6TWIFX8B --paths "/*"
