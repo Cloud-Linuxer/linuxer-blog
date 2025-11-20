@@ -165,11 +165,11 @@ amazon linux 의 path는 uuid 가 아니라 label 기반이므로 그냥 복사�
 먼저 마운트를 해줘야 한다.
 
 ```bash
-#cd /mnt/new
-# mount -B /dev dev
-# mount -B /proc /proc
-# mount -B /sys sys
-# chroot .
+$cd /mnt/new
+$ mount -B /dev dev
+$ mount -B /proc /proc
+$ mount -B /sys sys
+$ chroot .
 ```
 
 
@@ -181,7 +181,7 @@ chroot 까지 정상적으로 마쳐 지면 이제 거의 다왔다.
 전) device.map 이 없을수도 있다. 없으면 걍 만들어 줘도 괜찮다.
 
 ```bash
-#cat /boot/grub/device.map
+$cat /boot/grub/device.map
 (hd0) /dev/sda
 (hd1) /dev/sdf
 (hd2) /dev/sdg
@@ -191,7 +191,7 @@ chroot 까지 정상적으로 마쳐 지면 이제 거의 다왔다.
 후)
 
 ```bash
-#vi /boot/grub/device.map
+$vi /boot/grub/device.map
 (hd0) /dev/xdva
 (hd1) /dev/xvdf
 (hd2) /dev/xvfg
