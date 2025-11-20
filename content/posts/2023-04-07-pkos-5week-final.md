@@ -33,10 +33,9 @@ Rancher 2.4버전까진 privileged모드에 대한 안내가 없지만 2.5버전
 
 가볍게 이전에 경험했던 이야기를 하면서 unsafe 에대한 이야기를 하려한다.
 
-```
+```bash
 #kubelet --allowed-unsafe-sysctls
-```
-
+```bash
 에 대한 이야기다. 한창 K8S의 성능에 대한 고민이 많던 시기다.
 이때에 쿠버네티스 네트워킹에 대해서 한창 많은 공부를 했던것 같다.
 
@@ -57,7 +56,7 @@ K8S의 성능이슈가 발생하였다. 흔히 말하는 쓰로틀링 이슈로 
 
 **net.core.somaxconn** 는 Listen backlog / Linsten 으로 바인딩된 서버 소켓에서 Accept를 기다리는 소캣 카운터의 하드리밋이다.
 
-```
+```bash
 cat /var/lib/kubelet/kubelet.conf apiVersion: kubelet.config.k8s.io/v1beta1 authentication:
   anonymous: {}
   webhook:
@@ -71,57 +70,49 @@ cat /var/lib/kubelet/kubelet.conf apiVersion: kubelet.config.k8s.io/v1beta1 auth
     json:
       infoBufferSize: "0"
   verbosity: 0 memorySwap: {} nodeStatusReportFrequency: 0s nodeStatusUpdateFrequency: 0s runtimeRequestTimeout: 0s shutdownGracePeriod: 0s shutdownGracePeriodCriticalPods: 0s streamingConnectionIdleTimeout: 0s syncFrequency: 0s volumeStatsAggPeriod: 0s
-```
-
+```bash
 여기에 박아서 사용할수 있다.
 
-```
+```bash
 allowed-unsafe-sysctls: - net.core.netdev_max_backlog - net.core.somaxconn
-```
-
+```bash
 설정을 추가했다. 이제 프로세스를 새시작하고 테스트 했다.
 
-```
+```bash
 32s                 Normal    NodeReady                 Node/i-0a7504d19e11fb642   Node i-0a7504d19e11fb642 status is now: NodeReady 31s                 Warning   SysctlForbidden           Pod/unsafe                 forbidden sysctl: "net.core.somaxconn" not allowlisted 14s (x6 over 30s)   Warning   FailedMount               Pod/unsafe                 MountVolume.SetUp failed for volume "kube-api-access-8w64p" : object "default"/"kube-root-ca.crt" not registered 4s                  Warning   SysctlForbidden           Pod/unsafe                 forbidden sysctl: "net.core.somaxconn" not allowlisted 4s                  Normal    Scheduled                 Pod/unsafe                 Successfully assigned default/unsafe to i-0a7504d19e11fb642
-```
-
+```bash
 어라...이젠 이전에 했던 방법이 안먹는다. 그럼 뭐..더 고전적인 방법이다.
 
-```
+```bash
 systemctl status kubelet.service
 ● kubelet.service - Kubernetes Kubelet Server
      Loaded: loaded (/lib/systemd/system/kubelet.service; enabled; vendor preset: enabled)
-```
-
+```bash
 보면 서비스 경로가 보인다. 이안에 kubelet을 시작하기 위한 경로들이 모여있다.
 
-```
+```bash
 [Unit] Description=Kubernetes Kubelet Server Documentation=https://github.com/kubernetes/kubernetes After=containerd.service
 [Service] EnvironmentFile=/etc/sysconfig/kubelet ExecStart=/usr/local/bin/kubelet "$DAEMON_ARGS" Restart=always RestartSec=2s StartLimitInterval=0 KillMode=process User=root CPUAccounting=true MemoryAccounting=true
 [Install] WantedBy=multi-user.target
-```
-
+```bash
 우린 /etc/sysconfig/kubelet 에 삽입하면 된다.
 
-```
+```bash
 cat /etc/sysconfig/kubelet
 DAEMON_ARGS="--anonymous-auth=false --authentication-token-webhook=true --authorization-mode=Webhook --cgroup-driver=systemd --cgroup-root=/ --client-ca-file=/srv/kubernetes/ca.crt --cloud-provider=external --cluster-dns=169.254.20.10 --cluster-domain=cluster.local --enable-debugging-handlers=true --eviction-hard=memory.available<100Mi,nodefs.available<10%,nodefs.inodesFree<5%,imagefs.available<10%,imagefs.inodesFree<5% --feature-gates=CSIMigrationAWS=true,InTreePluginAWSUnregister=true --hostname-override=i-0a7504d19e11fb642 --kubeconfig=/var/lib/kubelet/kubeconfig --max-pods=100 --pod-infra-container-image=registry.k8s.io/pause:3.6@sha256:3d380ca8864549e74af4b29c10f9cb0956236dfb01c40ca076fb6c37253234db --pod-manifest-path=/etc/kubernetes/manifests --protect-kernel-defaults=true --register-schedulable=true --resolv-conf=/run/systemd/resolve/resolv.conf --v=2 --volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ --cloud-config=/etc/kubernetes/in-tree-cloud.config --node-ip=172.30.52.244 --runtime-request-timeout=15m --container-runtime-endpoint=unix:///run/containerd/containerd.sock --tls-cert-file=/srv/kubernetes/kubelet-server.crt --tls-private-key-file=/srv/kubernetes/kubelet-server.key --config=/var/lib/kubelet/kubelet.conf" HOME="/root"
 
-```
-
+```bash
 여기 DAEMON_ARGS 뒤에 --allowed-unsafe-sysctls 'kernel.msg\*,net.core.somaxconn' 를 추가해준다.
 
 재시작 까지하면 프로세스에 추가된 파라미터가 보인다.
 
-```
+```bash
 ps afxuwww | grep unsafe root       27576  0.0  0.0   8168   656 pts/0    S+   13:07   0:00                          \\_ grep --color=auto unsafe root       27340  2.3  2.4 1789712 94144 ?       Ssl  13:06   0:00 /usr/local/bin/kubelet --anonymous-auth=false --authentication-token-webhook=true --authorization-mode=Webhook --cgroup-driver=systemd --cgroup-root=/ --client-ca-file=/srv/kubernetes/ca.crt --cloud-provider=external --cluster-dns=169.254.20.10 --cluster-domain=cluster.local --enable-debugging-handlers=true --eviction-hard=memory.available<100Mi,nodefs.available<10%,nodefs.inodesFree<5%,imagefs.available<10%,imagefs.inodesFree<5% --feature-gates=CSIMigrationAWS=true,InTreePluginAWSUnregister=true --hostname-override=i-0a7504d19e11fb642 --kubeconfig=/var/lib/kubelet/kubeconfig --max-pods=100 --pod-infra-container-image=registry.k8s.io/pause:3.6@sha256:3d380ca8864549e74af4b29c10f9cb0956236dfb01c40ca076fb6c37253234db --pod-manifest-path=/etc/kubernetes/manifests --protect-kernel-defaults=true --register-schedulable=true --resolv-conf=/run/systemd/resolve/resolv.conf --v=2 --volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ --cloud-config=/etc/kubernetes/in-tree-cloud.config --node-ip=172.30.52.244 --runtime-request-timeout=15m --container-runtime-endpoint=unix:///run/containerd/containerd.sock --tls-cert-file=/srv/kubernetes/kubelet-server.crt --tls-private-key-file=/srv/kubernetes/kubelet-server.key --config=/var/lib/kubelet/kubelet.conf --allowed-unsafe-sysctls kernel.msg*,net.core.somaxconn
-```
-
-```
+```bash
+```bash
 # k events
 5s                      Normal    NodeAllocatableEnforced   Node/i-0a7504d19e11fb642   Updated Node Allocatable limit across pods 4s                       Normal    Scheduled                 Pod/unsafe                 Successfully assigned default/unsafe to i-0a7504d19e11fb642 3s                       Normal    Pulling                   Pod/unsafe                 Pulling image "centos:7" k get pod NAME     READY   STATUS    RESTARTS   AGE unsafe   1/1     Running   0          20s
-```
-
+```bash
 정상적으로 스케줄링된것이 보인다.
 
 이로서 unsafe 파라미터를 영구적으로 적용할수 있게되었다.

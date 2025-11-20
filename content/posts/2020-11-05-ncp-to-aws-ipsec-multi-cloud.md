@@ -135,22 +135,19 @@ There are no IKEv1 SAs
 
 인스턴스 내부에서 인터페이스를 설정해주세요.
 
-```
+```bash
 cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-eth1 DEVICE=eth1 BOOTPROTO=static ONBOOT=yes #Private Subnet IP로 변경해주세요. IPADDR=192.168.1.13 EOF ifup eth1
-```
-
+```bash
 이제 라우팅을 추가해야 합니다.
 
-```
+```bash
 ip route add 172.31.0.0/16 via 192.168.1.1 dev eth1
-```
-
+```bash
 추가 명령어 입니다.
 
-```
+```bash
  ip route del 172.31.0.0/16 via 192.168.1.1
-```
-
+```bash
 라우팅을 잘못 넣게 되면 ip route del 명령어로 라우팅을 삭제할수 있습니다.
 라우팅이 정상적으로 잘 연결되면 이제 AWS 에도 라우팅 테이블을 추가해야 합니다.
 
@@ -161,20 +158,19 @@ ip route add 172.31.0.0/16 via 192.168.1.1 dev eth1
 
 그리고 NCP의 인스턴스에서 ping 을 날려줍니다. AWS ikev1 은 DPD를 이용할수 없기 때문에 상태방에서 터널을 개시해야 합니다.
 
-```
+```bash
 [root@s17596a9a6e6 ~]# ifconfig | grep inet
         inet 10.41.151.70  netmask 255.255.254.0  broadcast 10.41.151.255
         inet 192.168.1.13  netmask 255.255.255.0  broadcast 192.168.1.255
         inet 127.0.0.1  netmask 255.0.0.0 [root@s17596a9a6e6 ~]# ping 172.31.36.10 PING 172.31.36.10 (172.31.36.10) 56(84) bytes of data. 64 bytes from 172.31.36.10: icmp_seq=1 ttl=62 time=3.93 ms 64 bytes from 172.31.36.10: icmp_seq=2 ttl=62 time=3.45 ms 64 bytes from 172.31.36.10: icmp_seq=3 ttl=62 time=3.33 ms 64 bytes from 172.31.36.10: icmp_seq=4 ttl=62 time=3.44 ms
 
-```
-
+```bash
 정상적으로 Site to Site VPN이 연결된것을 확인할수 있습니다.
 
 이렇게 정상적으로 VPN이 연결 되면 AWS 콘솔에선 터널이 UP 상태가 되고,
 NCP 콘솔에선 active 로 표시됩니다. 그리고 마지막으로 정상적으로 터널링이 맺어져서 통신이 되면 NCP 콘솔에서 아래와 같이 확인할수 있습니다.
 
-```
+```bash
 KEv1 SAs:
 Active SA: 1 Rekey SA: 0 (A tunnel will report 1 Active and 1 Rekey SA during rekey) Total IKE SA: 1
 1 IKE Peer: 3.34.211.29 Type : L2L Role : initiator Rekey : no State : MM_ACTIVE interface: outside Crypto map tag: outside_map, seq num: 1, local addr: 49.236.139.115
@@ -182,8 +178,7 @@ access-list outside_cryptomap_1 extended permit ip 192.168.1.0 255.255.255.0 172
  #pkts encaps: 827, #pkts encrypt: 827, #pkts digest: 827 #pkts decaps: 764, #pkts decrypt: 764, #pkts verify: 764 #pkts compressed: 0, #pkts decompressed: 0 #pkts not compressed: 827, #pkts comp failed: 0, #pkts decomp failed: 0 #pre-frag successes: 0, #pre-frag failures: 0, #fragments created: 0 #PMTUs sent: 0, #PMTUs rcvd: 0, #decapsulated frgs needing reassembly: 0 #TFC rcvd: 0, #TFC sent: 0 #Valid ICMP Errors rcvd: 0, #Invalid ICMP Errors rcvd: 0 #send errors: 0, #recv errors: 0
 local crypto endpt.: 49.236.139.115/0, remote crypto endpt.: 3.34.211.29/0 path mtu 1500, ipsec overhead 74(44), media mtu 1500 PMTU time remaining (sec): 0, DF policy: copy-df ICMP error validation: disabled, TFC packets: disabled current outbound spi: C7CCEEBF current inbound spi : E2B83FD5
 inbound esp sas: spi: 0xE2B83FD5 (3803725781) SA State: active transform: esp-aes esp-sha-hmac no compression in use settings ={L2L, Tunnel, PFS Group 2, IKEv1, } slot: 0, conn_id: 264200192, crypto-map: outside_map sa timing: remaining key lifetime (sec): 108 IV size: 16 bytes replay detection support: Y Anti replay bitmap: 0x00000000 0x00000001 spi: 0xEED2584F (4006762575) SA State: active transform: esp-aes esp-sha-hmac no compression in use settings ={L2L, Tunnel, PFS Group 2, IKEv1, Rekeyed} slot: 0, conn_id: 264200192, crypto-map: outside_map sa timing: remaining key lifetime (sec): 0 IV size: 16 bytes replay detection support: Y Anti replay bitmap: 0x00000000 0x00000001 outbound esp sas: spi: 0xC7CCEEBF (3352096447) SA State: active transform: esp-aes esp-sha-hmac no compression in use settings ={L2L, Tunnel, PFS Group 2, IKEv1, } slot: 0, conn_id: 264200192, crypto-map: outside_map sa timing: remaining key lifetime (sec): 108 IV size: 16 bytes replay detection support: Y Anti replay bitmap: 0x00000000 0x00000001 spi: 0xC47BC9E1 (3296446945) SA State: active transform: esp-aes esp-sha-hmac no compression in use settings ={L2L, Tunnel, PFS Group 2, IKEv1, Rekeyed} slot: 0, conn_id: 264200192, crypto-map: outside_map sa timing: remaining key lifetime (sec): 0 IV size: 16 bytes replay detection support: Y Anti replay bitmap: 0x00000000 0x00000001
-```
-
+```bash
 이 포스팅은 과정 자체만 설명하고 자세한 프로토콜이나, 인증방식은 설명하지 않았습니다.
 
 사용자의 레벨에서 따라만 해도 VPN 터널링이 가능한 수준의 포스팅을 하려했으나, VPN이 조금 난이도가 있는거 같습니다.

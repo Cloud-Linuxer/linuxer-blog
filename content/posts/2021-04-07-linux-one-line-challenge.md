@@ -57,28 +57,25 @@ ls -lt 는 시간순 정렬이다.
 
 ![](/images/2021/04/image-10.png)
 
-```
+```bash
 find . -type d -exec bash -c 'echo "next dir: ${1}" ; ls -lt "$1" |
     grep ^- |
     head -n 5' bash {} \\;
-```
-
+```bash
 정답이다. 그러나 더깔끔하게 하고싶었다 나는...ㅠㅠ
 
 ![](/images/2021/04/image-11.png)
 
-```
+```bash
 find /root -type d -exec sh -c "ls -lpt {} | egrep -v '^d|합계' | head -n 1" \\;
-```
-
+```bash
 나는 grep -v 로 ^d 옵션을 줘서 첫글자가 d 그러니까 디렉토리 속성일경우 제외하여 결과를 만들었다.
 
 ![](/images/2021/04/image-13.png)
 
-```
+```bash
 sh -c "find /root -type d -exec bash -c \\"ls -lpt {} | egrep -v '/|total' | head -n 1 \\" \\;" | awk '{print $9}'
-```
-
+```bash
 리눅스는 각자의 방법이 있다.
 
 그런 방법들이 너무 사랑스럽다.

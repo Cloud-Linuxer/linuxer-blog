@@ -25,7 +25,7 @@ aliases:
 
 PHP는 도커파일을 먼저 작성했다.
 
-```
+```bash
 FROM php:7.4-fpm
 RUN apt-get update \\
     && apt-get install -y --no-install-recommends \\
@@ -44,28 +44,25 @@ RUN apt-get update \\
         && docker-php-ext-install mysqli
 # Clear cache RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 WORKDIR /srv/app RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini RUN echo "date.timezone=Asia/Seoul" >> /usr/local/etc/php/php.ini RUN sed -i --follow-symlinks 's|127.0.0.1:9000|/run/php-fpm.sock|g' /usr/local/etc/php-fpm.d/www.conf RUN sed -i --follow-symlinks 's|short_open_tag = Off|short_open_tag = On|g' /usr/local/etc/php/php.ini RUN sed -i --follow-symlinks 's|9000|/run/php-fpm.sock|g' /usr/local/etc/php-fpm.d/zz-docker.conf CMD ["php-fpm"]
-```
-
+```bash
 몇가지 수정사항이 있었는데 먼저 tcp socket를 사용하지 않고, unix socket을 사용했다. 흔하게 file socket이라고도 하는데 nginx <-> php-fpm 의 socket 통신의 속도가 상승한다. nginx와 php-fpm이 같은 서버내에 있을때 사용할수 있는 방법이다.
 또 zz-docker.conf 는 php 이미지에서 ext를 설치할때 docker 패키지를 사용하면설치되는데 이 conf파일안에 unix 소켓을 사용할수 없도록 만드는 설정이 있다.
 
-```
+```bash
 [global] daemonize = no
 [www] listen = 9000
 
-```
-
+```bash
 위설정이 바로 그 설정이다 listen = 9000 이 fix로 박히게 되는데 이걸 수정해주지 않으면 www.conf를 아무리 수정해도 unix socket을 사용할수 없다. 변경하고 빌드는 정상적으로 됬다.
 
 빌드후 push는 NCP 의 [Container Registry](https://www.ncloud.com/product/compute/containerRegistry) 서비스를 이용했다. docker login 할때 sub account 의 access key 와 secret key를 생성해서 사용했다.
 
-```
+```bash
 docker build -t linuxer-cr/php-fpm:12 ./ docker push linuxer-cr/php-fpm:12
-```
-
+```bash
 12번에 걸쳐서 빌드 테스트를 진행했다. centos 이미지였다면 쉬웠을껀데ㅠㅠ그냥 있는 이미지 써본다고 고생했다. 빌드가 완료된 php-fpm을 deployment 로 배포했다.
 
-```
+```bash
 apiVersion: apps/v1 kind: Deployment metadata:
   name: php-fpm-nginx-deployment spec:
   selector:
@@ -124,8 +121,7 @@ apiVersion: apps/v1 kind: Deployment metadata:
       - name: www
         persistentVolumeClaim:
           claimName: nfs-pvc
-```
-
+```bash
 위의 manifest 는 완성된 버전이다. 특이한 부분을 말하자면 몇가지가 있는데,
 
 첫번째로 nignx pod 와 php-fpm container의 unix socket 을 공유하는 부분이다.
@@ -142,7 +138,7 @@ NFS-Server pod 를 생성하여 내부에서 NFS-Server를 이용한 데이터�
 
 NAS 서비스를 확인하고,
 
-```
+```bash
 #프로비저너 설치 helm --kubeconfig=$KUBE_CONFIG install storage stable/nfs-client-provisioner --set nfs.server=169.254.82.85 --set nfs.path=/n2638326_222222
 #프로비저너 설치확인 k get pod storage-nfs-client-provisioner-5b88c7c55-dvtlj
 NAME                                             READY   STATUS    RESTARTS   AGE storage-nfs-client-provisioner-5b88c7c55-dvtlj   1/1     Running   0          33m
@@ -155,13 +151,12 @@ NAME                                             READY   STATUS    RESTARTS   AG
     requests:
       storage: 10Gi
   storageClassName: nfs-client EOF
-```
-
+```bash
 볼륨까지 프로비저닝했다.
 
 그리고 네번째 nginx-config 다 configmap 으로 만들어져서 /etc/nginx/conf.d/default.conf 경로에 subpath 로 파일로 마운트된다.
 
-```
+```bash
 cat << EOF | k apply -f - kind: ConfigMap apiVersion: v1 metadata:
   name: nginx-config data:
   default.conf: |
@@ -190,8 +185,7 @@ cat << EOF | k apply -f - kind: ConfigMap apiVersion: v1 metadata:
         fastcgi_param SCRIPT_FILENAME \\$document_root\\$fastcgi_script_name;
     }
     } EOF
-```
-
+```bash
 나는 대다수의 manifest를 shell 에서 그대로 적용해버리기때문에 $request_method 이런 변수가 있는 부분은 \\$request_method 역슬러시를 넣어서 평문 처리를해줬다.
 
 이 nginx conf configmaps 에서 특이점은 try_files \\$uri \\$uri/ /index.php?\\$args; 부분이다. 이부분이 빠지면 wordpress 의 주소형식을 사용할수 없어 페이지 이동이 되지 않는다.
@@ -202,52 +196,47 @@ cat << EOF | k apply -f - kind: ConfigMap apiVersion: v1 metadata:
 
 그냥 귀찮아서 bastion host에서 rsync 로 sync 했다.
 
-```
+```bash
 #NFS mount mount -t nfs nasserverip/마운트정보 /mnt #pod 가 마운트된 pvc로 다이렉트로 sync rsync root@aws-ec2-ip:/wordpressdir /mnt/default-nfs-pvc-pvc-d04852d6-b138-40be-8fc3-150894a3daac
 
-```
-
+```bash
 이렇게 하니 단순 expose 만으로도 1차적으로 사이트가 떴다.
 
 NPLB(Network Proxy Load Balancer) -> nginx-php-fpm POD -> AWS RDS
 
 이런구성으로 돌고있었기에 DB를 옮겨왔다.
 
-```
+```bash
 #mysqldump mysqldump -h rdsendpoint -u linxuer -p linuxer_blog > linuxerblog.sql #sync rsync root@aws-ec2-ip:/linuxerblog.sql /home/
 
-```
-
+```bash
 테스트용도로 사용할 CDB
 
 ![](/images/2021/09/image-2-1024x89.png)
 
-```
+```bash
 mysql -h cdb-endpoint -u -p linuxer_blog < linuxerblog.sql
-```
-
+```bash
 디비 복구후 wp-config 에서 define('DB_HOST') 를 CDB로 변경했다. 기나긴 트러블 슈팅의 기간이 끝나가고 있었다.
 
 잘될줄 알았는데, 그건 저 혼자만의 생각이었습니다.
 
 처음부터 SSL은 절대 처리하지 않을것이라 생각했건만...이렇게 된거 Let's encrypt로 간다!
 
-```
+```bash
 #certbot install yum install certbot certbot-plagin-route53
 #route53이용한 인증 certbot certonly \\
   --dns-route53 \\
   -d linuxer.name \\
   -d *.linuxer.name
 
-```
-
+```bash
 인증서에 root ca 가 포함되어있지 않기 때문에 root ca를 서버의 번들 인증서에서 삽입해 줘야한다.
 
-```
+```bash
 openssl pkcs7 -inform der -in dstrootcax3.p7c -out dstrootcax3.pem -print_certs cp fullchain.pem fullca.pem cat dstrootcax3.pem >> fullca.pem openssl verify -CAfile fullca.pem cert.pem cert.pem: OK
 
-```
-
+```bash
 이렇게 하면 이제 private key, public key, root ca chain 해서 Certificate Manager에 인증서가 등록이 가능하다. 여기에 잘 등록하면,
 
 ![](/images/2021/09/image-4-1024x186.png)
@@ -258,14 +247,13 @@ openssl pkcs7 -inform der -in dstrootcax3.p7c -out dstrootcax3.pem -print_certs 
 
 이제 드디어 ingress 를 만들 준비가 되었다. ingress 를 만들기 위해 먼저 svc가 필요하다.
 
-```
+```bash
 k expose deployment php-fpm-nginx-deployment --type=NodePort --port=80 --target-port=80 --name=php-fpm-nginx-deployment
 k get svc NAME                           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE php-fpm-nginx-deployment-svc   NodePort    198.19.196.141   <none>        80:30051/TCP   24h
-```
-
+```bash
 정상적으로 만들어 진게 확인되면,
 
-```
+```bash
 cat << EOF | k apply -f - apiVersion: extensions/v1beta1 kind: Ingress metadata:
   annotations:
     kubernetes.io/ingress.class: alb
@@ -293,8 +281,7 @@ cat << EOF | k apply -f - apiVersion: extensions/v1beta1 kind: Ingress metadata:
         backend:
           serviceName: my-service
           servicePort: 80 EOF
-```
-
+```bash
 대망의 ingress다. ALB 컨트롤러를 이용해 ingress를 생성하고 컨트롤한다.alb.ingress.kubernetes.io/ssl-certificate-no: "----" 이부분은 Resource Manager에서 NRN을 확인하자.
 
 이후 내블로그를 NKS로 완벽하게 이전을 마치고 앞으로의 K8S의 테스트 환경이 될 모르모트로 완성되었다.

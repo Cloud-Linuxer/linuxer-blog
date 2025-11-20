@@ -170,9 +170,7 @@ $ mount -B /dev dev
 $ mount -B /proc /proc
 $ mount -B /sys sys
 $ chroot .
-```
-
-
+```bash
 제일 중요한 부분은 /proc 부분이다. mount bind 해주지 않으면 정상적으로 파티션 포지션을 불러오지 않는다.
 
 chroot 까지 정상적으로 마쳐 지면 이제 거의 다왔다.
@@ -185,9 +183,7 @@ $cat /boot/grub/device.map
 (hd0) /dev/sda
 (hd1) /dev/sdf
 (hd2) /dev/sdg
-```
-
-
+```bash
 후)
 
 ```bash
@@ -196,9 +192,7 @@ $vi /boot/grub/device.map
 (hd1) /dev/xvdf
 (hd2) /dev/xvfg
 :wq!
-```
-
-
+```bash
 변경을 완료하였다면 이제 grub-install 이 가능한 상태가 되었다.
 
 # grub-install /dev/xvdf
