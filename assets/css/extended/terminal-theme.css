@@ -745,6 +745,53 @@ code, pre, kbd, samp {
     padding: 1.5em;
 }
 
+/* Spacing Optimization - Compact Layout */
+:root {
+    --gap: 16px !important;  /* Reduced from 24px */
+    --content-gap: 14px !important;  /* Reduced content spacing */
+}
+
+/* Reduce header padding */
+.header {
+    padding: 12px 0 !important;
+}
+
+/* Optimize main container */
+.main {
+    max-width: 920px !important;  /* Increased from 768px */
+    padding: 16px !important;  /* Reduced from 24px */
+    margin: 0 auto !important;
+}
+
+/* Compact hero/first-entry section */
+.first-entry {
+    min-height: 180px !important;  /* Reduced from 320px */
+    margin: 16px 0 24px 0 !important;  /* Reduced from 24px 0 48px */
+    padding: 20px !important;
+}
+
+/* Tighter post cards */
+.post-entry {
+    margin-bottom: 16px !important;  /* Reduced from 24px */
+    padding: 18px !important;  /* Reduced from 24px */
+}
+
+/* Reduce post title size slightly for density */
+.entry-header h2 {
+    font-size: 20px !important;
+    line-height: 1.2 !important;
+}
+
+/* Adjust entry content spacing */
+.entry-content {
+    margin: 6px 0 !important;  /* Reduced from 8px */
+}
+
+/* Reduce pagination spacing */
+.pagination {
+    margin: 24px 0 !important;
+}
+
 /* Fix: Complete click-through solution */
 
 /* CRITICAL: Define entry-link base styles (missing from build) */

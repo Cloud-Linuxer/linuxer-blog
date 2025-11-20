@@ -26,6 +26,14 @@ theme = 'PaperMod'
   name = "github"
   url = "https://github.com/Cloud-Linuxer"
 
+[[params.socialIcons]]
+  name = "linkedin"
+  url = "https://www.linkedin.com/in/taehwan-jeong-274846190/"
+
+[[params.socialIcons]]
+  name = "email"
+  url = "mailto:linuxer.name@gmail.com"
+
 [[menu.main]]
   name = "About"
   url = "/about/"
