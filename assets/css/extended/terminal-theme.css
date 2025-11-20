@@ -768,17 +768,26 @@ code, pre, kbd, samp {
     z-index: 10 !important;
 }
 
-/* Ensure all post-entry children allow clicks through to entry-link */
+/* Fix: Make post-entry children non-blocking for clicks */
 [data-theme="dark"] .post-entry .entry-header,
 [data-theme="dark"] .post-entry .entry-content,
 [data-theme="dark"] .post-entry .entry-footer {
-    position: relative;
-    z-index: 1;
+    pointer-events: none;
+}
+
+/* Allow text selection in children */
+[data-theme="dark"] .post-entry h2,
+[data-theme="dark"] .post-entry p {
+    pointer-events: auto;
 }
 
 [data-theme="light"] .post-entry .entry-header,
 [data-theme="light"] .post-entry .entry-content,
 [data-theme="light"] .post-entry .entry-footer {
-    position: relative;
-    z-index: 1;
+    pointer-events: none;
+}
+
+[data-theme="light"] .post-entry h2,
+[data-theme="light"] .post-entry p {
+    pointer-events: auto;
 }
