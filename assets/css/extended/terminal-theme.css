@@ -25,33 +25,33 @@
 
 /* Typography - IBM Plex for technical elegance */
 body {
-    font-family: 'IBM Plex Sans KR', -apple-system, sans-serif;
-    line-height: 1.7;
+    font-family: 'IBM Plex Sans KR', -apple-system, sans-serif !important;
+    line-height: 1.7 !important;
     font-weight: 400;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'IBM Plex Mono', monospace !important;
     font-weight: 600;
 }
 
 code, pre, kbd, samp {
-    font-family: 'IBM Plex Mono', 'Consolas', monospace;
+    font-family: 'IBM Plex Mono', 'Consolas', monospace !important;
     font-variant-ligatures: common-ligatures;
 }
 
 /* Dark mode base */
 .dark {
-    --theme: var(--bg-black);
-    --entry: var(--bg-dark);
-    --primary: var(--text-primary);
-    --secondary: var(--text-secondary);
-    --border: #30363d;
+    --theme: var(--bg-black) !important;
+    --entry: var(--bg-dark) !important;
+    --primary: var(--text-primary) !important;
+    --secondary: var(--text-secondary) !important;
+    --border: #30363d !important;
 }
 
 .dark body {
-    background: linear-gradient(135deg, #0a0e14 0%, #151a21 100%);
-    color: var(--text-primary);
+    background: linear-gradient(135deg, #0a0e14 0%, #151a21 100%) !important;
+    color: var(--text-primary) !important;
 }
 
 /* Logo with animated terminal prompt */
