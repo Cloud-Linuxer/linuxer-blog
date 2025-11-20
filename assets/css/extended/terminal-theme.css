@@ -708,3 +708,12 @@ code, pre, kbd, samp {
     display: block;
     padding: 1.5em;
 }
+
+/* Fix: Ensure entry-link is above all content */
+[data-theme="dark"] .entry-link {
+    z-index: 10 !important;
+}
+
+[data-theme="light"] .entry-link {
+    z-index: 10 !important;
+}
