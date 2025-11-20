@@ -745,24 +745,23 @@ code, pre, kbd, samp {
     padding: 1.5em;
 }
 
-/* Fix: Ensure entry-link is above all content */
+/* Fix: Complete click-through solution */
+/* Step 1: Disable clicks on ALL children except entry-link */
+[data-theme="dark"] .post-entry * {
+    pointer-events: none !important;
+}
+
+[data-theme="light"] .post-entry * {
+    pointer-events: none !important;
+}
+
+/* Step 2: Re-enable clicks ONLY on entry-link */
 [data-theme="dark"] .entry-link {
+    pointer-events: auto !important;
     z-index: 10 !important;
 }
 
 [data-theme="light"] .entry-link {
+    pointer-events: auto !important;
     z-index: 10 !important;
-}
-
-/* Fix: Make post-entry children non-blocking for clicks */
-[data-theme="dark"] .post-entry .entry-header,
-[data-theme="dark"] .post-entry .entry-content,
-[data-theme="dark"] .post-entry .entry-footer {
-    pointer-events: none;
-}
-
-[data-theme="light"] .post-entry .entry-header,
-[data-theme="light"] .post-entry .entry-content,
-[data-theme="light"] .post-entry .entry-footer {
-    pointer-events: none;
 }

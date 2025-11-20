@@ -150,9 +150,44 @@ slug: "post-slug"
 3. Clear browser cache or use incognito
 4. CloudFront cache: Wait 5-10min or invalidate manually
 
-### Post Cards Not Clickable
-- Ensure `pointer-events: none` on `::before` and `::after`
-- Ensure `.entry-link` has `z-index: 10 !important`
+### Post Cards Not Clickable (CRITICAL ISSUE)
+
+**Root Cause**: Complex CSS stacking and pointer-events inheritance issues
+
+**Symptoms**:
+- Click animation works (`.post-entry:active` scales to 0.96)
+- But navigation doesn't trigger (`.entry-link` not receiving clicks)
+
+**Complete Fix Required**:
+```css
+/* 1. Disable ALL clicks on post-entry children */
+[data-theme="dark"] .post-entry * {
+    pointer-events: none !important;
+}
+
+/* 2. Re-enable ONLY on entry-link */
+[data-theme="dark"] .entry-link {
+    pointer-events: auto !important;
+    z-index: 10 !important;
+}
+```
+
+**Why This Happens**:
+- `.post-entry` has multiple children: header, content, footer, and entry-link
+- `.entry-link` is absolute positioned but still a child element
+- Without explicit `pointer-events: auto` on `.entry-link`, it inherits `none`
+- The `*` selector ensures ALL children are disabled, then we selectively re-enable
+
+**Testing**:
+1. Check if `.post-entry:active` animation triggers (scale effect)
+2. Check if clicking navigates to the post
+3. Both should work - if not, CSS specificity issue exists
+
+**Common Mistakes to Avoid**:
+- ❌ Setting `pointer-events: none` only on specific children (header, content, footer)
+- ❌ Not setting `pointer-events: auto` explicitly on `.entry-link`
+- ❌ Assuming z-index alone will fix click issues
+- ❌ Setting `pointer-events: auto` on h2, p elements (blocks navigation)
 
 ### Code Blocks Broken
 - Check language specifier present
