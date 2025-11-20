@@ -78,6 +78,12 @@ code, pre, kbd, samp {
     margin-bottom: 1.5em;
 }
 
+/* Hide code blocks in entry-content (list view) */
+.entry-content code,
+.entry-content pre {
+    display: none;
+}
+
 /* Heading improvements */
 .dark .post-content h1,
 .dark .post-content h2,
