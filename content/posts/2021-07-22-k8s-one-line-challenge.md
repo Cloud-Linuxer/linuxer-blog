@@ -25,7 +25,7 @@ service 에서 selector 나 endpoint를 확인해서 labels 를 보고 확인해
 
 my-service1 이라는 서비스에서 사용하는 pod를 조회할꺼다.
 
-```
+```bash
 k get svc -o wide NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE     SELECTOR kubernetes    ClusterIP   198.19.128.1     <none>        443/TCP        2d13h   <none> my-service1   NodePort    198.19.231.233   <none>        80:30001/TCP   2d12h   app=my-nginx1 my-service2   NodePort    198.19.172.176   <none>        80:30002/TCP   2d12h   app=my-nginx2 my-service3   NodePort    198.19.200.20    <none>        80:30003/TCP   2d12h   app=my-nginx3
 k get pods -l app=my-nginx1 --show-labels
 NAME                         READY   STATUS    RESTARTS   AGE   LABELS my-nginx1-67f499d79c-g7vr7   1/1     Running   0          26h   app=my-nginx1,pod-template-hash=67f499d79c my-nginx1-67f499d79c-j4f9k   1/1     Running   0          26h   app=my-nginx1,pod-template-hash=67f499d79c my-nginx1-67f499d79c-mqxzs   1/1     Running   1          26h   app=my-nginx1,pod-template-hash=67f499d79c
@@ -36,13 +36,13 @@ kubectl. 에서 svc 를 get하고 -o wide 명령어를 쓰면 selector 가보인
 
 미끼를 물어주신 iamai 님께 감사를 드린다. - 재차 감사! - 예아!
 
-```
+```bash
 kubectl get endpoints |grep my-service1 |awk '{print $2}'|tr "," "\ " |awk -F":" '{print $1}' |grep -f - <(kubectl get po -o wide) my-nginx1-67f499d79c-g7vr7   1/1     Running    0          26h   198.18.0.74    nks-pool-1119-w-gzg   <none>           <none> my-nginx1-67f499d79c-j4f9k   1/1     Running    0          26h   198.18.2.250   nks-pool-1119-w-gzh   <none>           <none> my-nginx1-67f499d79c-mqxzs   1/1     Running    1          26h   198.18.1.208   nks-pool-1119-w-gzi   <none>           <none>
 
 ```
 endpoint 에서 조회된 IP를 awk 로 떼어서 한줄씩으로 변환후 포트를 제거한다. 그리고 pod list 에서 IP가 grep 된 줄만 출력한다.
 
-```
+```json
 [root@linuxer-bastion ~]# kubectl get endpoints NAME          ENDPOINTS                                         AGE kubernetes    10.0.12.10:6443,10.0.12.11:6443,10.0.12.16:6443   2d13h my-service1   198.18.0.74:80,198.18.1.208:80,198.18.2.250:80    2d13h my-service2   198.18.0.173:80,198.18.1.155:80,198.18.2.120:80   2d13h my-service3   198.18.0.6:80,198.18.1.139:80,198.18.2.70:80      2d13h [root@linuxer-bastion ~]# kubectl get endpoints |grep my-service1
 my-service1   198.18.0.74:80,198.18.1.208:80,198.18.2.250:80    2d13h [root@linuxer-bastion ~]# kubectl get endpoints |grep my-service1 |awk '{print $2}' 198.18.0.74:80,198.18.1.208:80,198.18.2.250:80 [root@linuxer-bastion ~]# kubectl get endpoints |grep my-service1 |awk '{print $2}'|tr "," "\ "
 198.18.0.74:80 198.18.1.208:80 198.18.2.250:80 [root@linuxer-bastion ~]# kubectl get endpoints |grep my-service1 |awk '{print $2}'|tr "," "\ " |awk -F":" '{print $1}'
@@ -54,14 +54,14 @@ iamai 님의 shell에 대한 이해도를 볼수있었다.
 
 나는 grep를 쓰지않고 출력하고 싶었다. 여러 엔지니어들을 보면 jsonpath로 예쁘게 깍는것이 부러웠다. 방법은 다양했다 json | jq 부터 jsonpath custom-columns 까지 방법이 많은데 나도 한번 써볼까 싶었다.
 
-```
+```text
 k get pod -l $(k get svc my-service1 -o=jsonpath='{..selector}' | sed 's/map//' | sed 's/:/=/' | tr -s '[[:space:]]' ' ') --show-labels NAME                         READY   STATUS    RESTARTS   AGE   LABELS my-nginx1-67f499d79c-g7vr7   1/1     Running   0          26h   app=my-nginx1,pod-template-hash=67f499d79c my-nginx1-67f499d79c-j4f9k   1/1     Running   0          26h   app=my-nginx1,pod-template-hash=67f499d79c my-nginx1-67f499d79c-mqxzs   1/1     Running   1          26h   app=my-nginx1,pod-template-hash=67f499d79c
 ```
 시작부터 iamai 님과의 다른접근을 볼수있다. 나는 label로 접근했고, iamai 님은 IP로 접근했다.
 
 selector 는 label을 기반으로 pod와 매핑되기때문에 IP가 우선이 되서는 안된다 생각했다. IP는 고정된 값이 아니므로. 그래서 label 을 사용하기로 생각했다.
 
-```
+```bash
 [root@linuxer-bastion ~]# k get svc my-service1 -o=jsonpath='{..selector}'
 map[app:my-nginx1] [root@linuxer-bastion ~]# k get svc my-service1 -o=jsonpath='{..selector}' | sed 's/map//'
 [app:my-nginx1] [root@linuxer-bastion ~]# k get svc my-service1 -o=jsonpath='{..selector}' | sed 's/map//' | sed 's/:/=/'
@@ -70,12 +70,12 @@ map[app:my-nginx1] [root@linuxer-bastion ~]# k get svc my-service1 -o=jsonpath='
 ```
 먼저 jsonpath를 이용하여 service의 selector를 찾는다 여기서 sed 명령어로 map[app:my-nginx1] 이라는 문자열을 두번 파이프라인하여 [app=my-nginx1]로 변환된다. json으로 출력한 문자열은 = -> : 으로 치환되어 표기된다. 그래서 변경해줘야 했다. 괄호를 벗겼다. 괄호를 벗은 값은 내가 처음부터 원했던 service - selector - label 이다. 이제 이값을 이용해서 pod 를 리스팅 하고 label를 보면 완성이다.
 
-```
+```text
 k get pod -l $(k get svc my-service1 -o=jsonpath='{..selector}' /| sed 's/map//' | sed 's/:/=/' | tr -s '[[:space:]]' ' ') --show-labels NAME                         READY   STATUS    RESTARTS   AGE   LABELS my-nginx1-67f499d79c-g7vr7   1/1     Running   0          26h   app=my-nginx1,pod-template-hash=67f499d79c my-nginx1-67f499d79c-j4f9k   1/1     Running   0          26h   app=my-nginx1,pod-template-hash=67f499d79c my-nginx1-67f499d79c-mqxzs   1/1     Running   1          26h   app=my-nginx1,pod-template-hash=67f499d79c
 ```
 내가 작성한 스크립트는 폰트크기 15다
 
-```
+```text
 k get ep -o custom-columns=IP:.subsets[].addresses[].ip IP 10.0.12.10 198.18.0.74 198.18.0.173 198.18.0.6
 
 ```
@@ -91,7 +91,7 @@ k get ep -o custom-columns=IP:.subsets[].addresses[].ip IP 10.0.12.10 198.18.0.7
 
 하고 누우려는데 성주님께서 주신 IP list 로 하나더 만들고 싶었다.
 
-```
+```text
 k get ep my-service1 -o custom-columns=IP:.subsets[].addresses[*].ip | tr "," "\ " | grep -v IP | grep -f - <(kubectl get po -o wide --show-labels)
 my-nginx1-67f499d79c-g7vr7   1/1     Running    0          27h   198.18.0.74    nks-pool-1119-w-gzg   <none>           <none>            app=my-nginx1,pod-template-hash=67f499d79c my-nginx1-67f499d79c-j4f9k   1/1     Running    0          27h   198.18.2.250   nks-pool-1119-w-gzh   <none>           <none>            app=my-nginx1,pod-template-hash=67f499d79c my-nginx1-67f499d79c-mqxzs   1/1     Running    1          27h   198.18.1.208   nks-pool-1119-w-gzi   <none>           <none>            app=my-nginx1,pod-template-hash=67f499d79c
 ```

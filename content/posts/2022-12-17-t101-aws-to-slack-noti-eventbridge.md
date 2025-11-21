@@ -31,7 +31,7 @@ CloudTrail 에서 발생하는 이벤트를 EventBridge 는 특정 패턴을 감
 
 아래 예가 그렇다.
 
-```
+```json
 {
   "source": ["aws.iam", "aws.ec2"],
   "detail-type": ["AWS API Call via CloudTrail"],
@@ -49,11 +49,11 @@ source / detail-type / detail 이렇게 세가지이다.
 
 두번째 문제는 Trail에 찍히는 로그와 EventBridge 에 전달되는 이벤트의 내용이 다르다.
 
-```
+```json
 { 'version':'0', 'id':'1', 'detail-type':'AWS Console Sign In via CloudTrail', 'source':'aws.signin', 'account':'1', 'time':'2022-12-17T01:09:08Z', 'region':'ap-northeast-2', 'resources':[ ], 'detail':{ 'eventVersion':'1.08', 'userIdentity':{ 'type':'IAMUser', 'principalId':'1', 'accountId':'1', 'accessKeyId':'', 'userName':'1' }, 'eventTime':'2022-12-17T01:09:08Z', 'eventSource':'signin.amazonaws.com', 'eventName':'CheckMfa', 'awsRegion':'ap-northeast-2', 'sourceIPAddress':'58.227.0.134', 'userAgent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.5249.114 Safari/537.36', 'requestParameters':None, 'responseElements':{ 'CheckMfa':'Success' }, 'additionalEventData':{ 'MfaType':'Virtual MFA' }, 'eventID':'1', 'readOnly':False, 'eventType':'AwsConsoleSignIn', 'managementEvent':True, 'recipientAccountId':'1', 'eventCategory':'Management', 'tlsDetails':{ 'tlsVersion':'TLSv1.2', 'cipherSuite':'ECDHE-RSA-AES128-GCM-SHA256', 'clientProvidedHostHeader':'ap-northeast-2.signin.aws.amazon.com' }
 } }
 ```
-```
+```json
 {
     "eventVersion": "1.08",
     "userIdentity": {
@@ -125,7 +125,7 @@ IAM > 계정설정 > 엔드포인트
 
 위에서 로그인 URL에 도쿄리전으로 파라미터가 들어가있는데 그 대로 로그인 해보겠다. 그전에 나의 계정에선 도쿄의 STS 엔드포인트를 비활성화하였다.
 
-```
+```json
 {
     "eventVersion": "1.08",
     "userIdentity": {
@@ -185,7 +185,7 @@ IAM > 계정설정 > 엔드포인트
 
 글로벌 서비스 추적을 만들려면 AWSCLI를 이용해서 만들어야 한다.
 
-```
+```bash
 # aws cloudtrail update-trail --name my-trail --no-include-global-service-events
 ```
 <https://docs.aws.amazon.com/ko_kr/awscloudtrail/latest/userguide/cloudtrail-create-and-update-a-trail-by-using-the-aws-cli-update-trail.html#cloudtrail-create-and-update-a-trail-by-using-the-aws-cli-examples-gses>

@@ -22,7 +22,7 @@ tcp port range는 32768에서 61000까지다 대략 28000개의 가용포트가 
 
 더이상의 새로운 TCP 세션을 생성할수 없게된다.
 
-```
+```text
 #tcp port range echo 10240 60999 > /proc/sys/net/ipv4/ip_local_port_range
 ```
 
@@ -32,13 +32,13 @@ tcp port range는 32768에서 61000까지다 대략 28000개의 가용포트가 
 
 그래도 해결이안되는듯 했다.
 
-```
+```bash
 [root@linuxer ~]# netstat -an | grep TIME_WAIT | wc -l 51314
 ```
 
 두배 이상의 port range 에도 처리가 불가능한 수준이었던것..
 
-```
+```text
 #tcp_timestamps 기본으로 이미 적용되어있음 $ sysctl -w ipv4.tcp_timestamps="1"
 #tcp reuse $ sysctl -w net.ipv4.tcp_tw_reuse="1"
 ```
@@ -57,7 +57,7 @@ tw_recycle은 서버입장에선 문제가 생길수있으니 설정에는 반�
 
 모든옵션을 켜는 방법이다. 참고하길..tcp_tw_recycle옵션은 사용할때 꼭 주의 해야한다
 
-```
+```text
 sysctl -w ipv4.tcp_timestamps="1" sysctl -w net.ipv4.tcp_tw_reuse="1" sysctl -w net.ipv4.tcp_fin_timeout="10"
 ```
 

@@ -17,7 +17,7 @@ bashtop 은 bash 4.4 이상 bpytop는 python3이상입니다.
 
 먼저 bash 5.0을 설치 하려 합니다.
 
-```
+```bash
  cd /usr/local/src/
  wget http://ftp.gnu.org/gnu/bash/bash-5.0.tar.gz
  tar zxvf bash-5.0.tar.gz
@@ -30,7 +30,7 @@ bashtop 은 bash 4.4 이상 bpytop는 python3이상입니다.
 ```
 그래서 bash 를 다운받고 컴파일 해줬습니다. 기존 bash 는 4.2 버전이라 bash.bak 으로 변경해 문제가 생기면 언제든 사용할수 있도록 만들었습니다.
 
-```
+```bash
 yum install git git clone https://github.com/aristocratos/bashtop.git cd bashtop/ make install
 ```
 이제 완성됬습니다.

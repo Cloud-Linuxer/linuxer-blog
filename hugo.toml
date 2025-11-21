@@ -5,6 +5,7 @@ theme = 'PaperMod'
 
 [params]
   ShowCodeCopyButtons = true
+  diagram = false
   ShowReadingTime = true
   ShowBreadCrumbs = true
   ShowPostNavLinks = true
@@ -66,6 +67,7 @@ theme = 'PaperMod'
     [markup.goldmark.renderer]
       unsafe = true
     [markup.goldmark.extensions]
+      typographer = false
       [markup.goldmark.extensions.passthrough]
         enable = false
         [markup.goldmark.extensions.passthrough.delimiters]

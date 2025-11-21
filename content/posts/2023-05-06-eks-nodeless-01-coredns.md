@@ -21,25 +21,25 @@ CoreDNS는 클러스터에 최저 2개의 Pod가 스케줄링되어야 한다.
 
 eksctl를 사용하여 Fargate 프로파일을 생성하려면 다음 eksctl 명령으로 Fargate 프로파일을 생성하고 모든 example value를 고유한 값으로 바꿉니다. 네임스페이스를 지정해야 합니다. 그러나 --labels 옵션은 필요하지 않습니다.
 
-```
+```text
 eksctl create fargateprofile \\
     --cluster my-cluster \\
     --name kube-system \\
     --namespace kube-system
-```
+```bash
 다음과 같이 생성해 주면된다. 그럼 kube-system namespace로 스케줄링되는 Pod는 Fargate로 생성되게 된다.
 
 그다음은 CoreDNS를 패치하고 재시작하면된다.
 
 <https://docs.aws.amazon.com/ko_kr/prescriptive-guidance/latest/patterns/deploy-coredns-on-amazon-eks-with-fargate-automatically-using-terraform-and-python.html>
 
-```
+```bash
 kubectl patch deployment coredns -n kube-system --type=json -p='[{"op": "remove", "path": "/spec/template/metadata/annotations", "value": "eks.amazonaws.com/compute-type"}]' kubectl rollout restart -n kube-system deployment coredns
 ```
 이렇게 진행하면 CoreDNS를 Fargate로 실행하게 된다.
 
-```
+```text
  k get pod -o wide NAME                      READY   STATUS    RESTARTS   AGE     IP              NODE                                                       NOMINATED NODE   READINESS GATES coredns-fd69467b9-bsh88   1/1     Running   0          5h18m   192.168.13.23   fargate-ip-192-168-13-23.ap-northeast-2.compute.internal   <none>           <none> coredns-fd69467b9-gn24k   1/1     Running   0          5h18m   192.168.12.34   fargate-ip-192-168-12-34.ap-northeast-2.compute.internal   <none>           <none>
 
-```
+```bash
 다음과 같이 스케줄링되면 정상적으로 배포 된것이다.

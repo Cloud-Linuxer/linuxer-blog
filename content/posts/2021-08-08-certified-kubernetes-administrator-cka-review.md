@@ -76,7 +76,7 @@ Udemy 강의의 **24. Accessing the Labs** 를 보면 kodekloud의 쿠폰을 준
 
 시험을 시작하면 제일먼저 해야할것은
 
-```
+```text
 source <(kubectl completion bash) echo "source <(kubectl completion bash)" >> ~/.bashrc alias k=kubectl complete -F __start_kubectl k
 ```
 이 네줄을 치트 시트에서 찾아서 입력하는것이다.
@@ -89,7 +89,7 @@ source <(kubectl completion bash) echo "source <(kubectl completion bash)" >> ~/
 
 그래서
 
-```
+```bash
 cat <<EOF | k apply -f - YAML EOF
 ```
 cat <<EOF | k apply -f - enter! 다음에 원하는 YAML을 넣고 EOF하는 것이다. 메모장은 시험에서 제공된 메모장으로 모두 에디터했다.. VI로 열고 닫고 넘귀찮은것.. 물론 방법이야 있는데..

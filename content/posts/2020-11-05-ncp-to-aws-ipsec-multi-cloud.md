@@ -135,17 +135,17 @@ There are no IKEv1 SAs
 
 인스턴스 내부에서 인터페이스를 설정해주세요.
 
-```
+```bash
 cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-eth1 DEVICE=eth1 BOOTPROTO=static ONBOOT=yes #Private Subnet IP로 변경해주세요. IPADDR=192.168.1.13 EOF ifup eth1
 ```
 이제 라우팅을 추가해야 합니다.
 
-```
+```text
 ip route add 172.31.0.0/16 via 192.168.1.1 dev eth1
 ```
 추가 명령어 입니다.
 
-```
+```text
  ip route del 172.31.0.0/16 via 192.168.1.1
 ```
 라우팅을 잘못 넣게 되면 ip route del 명령어로 라우팅을 삭제할수 있습니다.
@@ -158,7 +158,7 @@ ip route add 172.31.0.0/16 via 192.168.1.1 dev eth1
 
 그리고 NCP의 인스턴스에서 ping 을 날려줍니다. AWS ikev1 은 DPD를 이용할수 없기 때문에 상태방에서 터널을 개시해야 합니다.
 
-```
+```bash
 [root@s17596a9a6e6 ~]# ifconfig | grep inet
         inet 10.41.151.70  netmask 255.255.254.0  broadcast 10.41.151.255
         inet 192.168.1.13  netmask 255.255.255.0  broadcast 192.168.1.255
@@ -170,7 +170,7 @@ ip route add 172.31.0.0/16 via 192.168.1.1 dev eth1
 이렇게 정상적으로 VPN이 연결 되면 AWS 콘솔에선 터널이 UP 상태가 되고,
 NCP 콘솔에선 active 로 표시됩니다. 그리고 마지막으로 정상적으로 터널링이 맺어져서 통신이 되면 NCP 콘솔에서 아래와 같이 확인할수 있습니다.
 
-```
+```bash
 KEv1 SAs:
 Active SA: 1 Rekey SA: 0 (A tunnel will report 1 Active and 1 Rekey SA during rekey) Total IKE SA: 1
 1 IKE Peer: 3.34.211.29 Type : L2L Role : initiator Rekey : no State : MM_ACTIVE interface: outside Crypto map tag: outside_map, seq num: 1, local addr: 49.236.139.115

@@ -14,12 +14,12 @@ aliases:
 패스워드 유효성 검증
 
 로그인 실패 5 계정 잠금 5분
-```
+```text
  $vi /etc/pam.d/common-auth
  16번째줄 삽입
  auth required pam_tally2.so file=/var/log/tallylog deny=5 even_deny_root unlock_time=300
 ```
-```
+```text
 $vi /etc/pam.d/common-account
  16 줄에 삽입
  account required pam_tally2.so
@@ -47,11 +47,11 @@ PASS_WARN_AGE 7
 
 패스워드 사용시간 제한
 
-```
+```text
 $vi /etc/login.defs
  PASS_MAX_DAYS 180
 ```
-```
+```text
 $vi /etc/pam.d/common-password
  password requisite pam_pwquality.so retry=3 minlen=10 minclass=3
  password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass sha512 remember=2

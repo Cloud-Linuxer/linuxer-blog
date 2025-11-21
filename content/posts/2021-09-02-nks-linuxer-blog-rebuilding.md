@@ -25,7 +25,7 @@ aliases:
 
 PHP는 도커파일을 먼저 작성했다.
 
-```
+```dockerfile
 FROM php:7.4-fpm
 RUN apt-get update \\
     && apt-get install -y --no-install-recommends \\
@@ -48,7 +48,7 @@ WORKDIR /srv/app RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php
 몇가지 수정사항이 있었는데 먼저 tcp socket를 사용하지 않고, unix socket을 사용했다. 흔하게 file socket이라고도 하는데 nginx <-> php-fpm 의 socket 통신의 속도가 상승한다. nginx와 php-fpm이 같은 서버내에 있을때 사용할수 있는 방법이다.
 또 zz-docker.conf 는 php 이미지에서 ext를 설치할때 docker 패키지를 사용하면설치되는데 이 conf파일안에 unix 소켓을 사용할수 없도록 만드는 설정이 있다.
 
-```
+```ini
 [global] daemonize = no
 [www] listen = 9000
 
@@ -57,12 +57,12 @@ WORKDIR /srv/app RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php
 
 빌드후 push는 NCP 의 [Container Registry](https://www.ncloud.com/product/compute/containerRegistry) 서비스를 이용했다. docker login 할때 sub account 의 access key 와 secret key를 생성해서 사용했다.
 
-```
+```bash
 docker build -t linuxer-cr/php-fpm:12 ./ docker push linuxer-cr/php-fpm:12
 ```
 12번에 걸쳐서 빌드 테스트를 진행했다. centos 이미지였다면 쉬웠을껀데ㅠㅠ그냥 있는 이미지 써본다고 고생했다. 빌드가 완료된 php-fpm을 deployment 로 배포했다.
 
-```
+```yaml
 apiVersion: apps/v1 kind: Deployment metadata:
   name: php-fpm-nginx-deployment spec:
   selector:
@@ -138,7 +138,7 @@ NFS-Server pod 를 생성하여 내부에서 NFS-Server를 이용한 데이터�
 
 NAS 서비스를 확인하고,
 
-```
+```bash
 #프로비저너 설치 helm --kubeconfig=$KUBE_CONFIG install storage stable/nfs-client-provisioner --set nfs.server=169.254.82.85 --set nfs.path=/n2638326_222222
 #프로비저너 설치확인 k get pod storage-nfs-client-provisioner-5b88c7c55-dvtlj
 NAME                                             READY   STATUS    RESTARTS   AGE storage-nfs-client-provisioner-5b88c7c55-dvtlj   1/1     Running   0          33m
@@ -156,7 +156,7 @@ NAME                                             READY   STATUS    RESTARTS   AG
 
 그리고 네번째 nginx-config 다 configmap 으로 만들어져서 /etc/nginx/conf.d/default.conf 경로에 subpath 로 파일로 마운트된다.
 
-```
+```bash
 cat << EOF | k apply -f - kind: ConfigMap apiVersion: v1 metadata:
   name: nginx-config data:
   default.conf: |
@@ -196,7 +196,7 @@ cat << EOF | k apply -f - kind: ConfigMap apiVersion: v1 metadata:
 
 그냥 귀찮아서 bastion host에서 rsync 로 sync 했다.
 
-```
+```text
 #NFS mount mount -t nfs nasserverip/마운트정보 /mnt #pod 가 마운트된 pvc로 다이렉트로 sync rsync root@aws-ec2-ip:/wordpressdir /mnt/default-nfs-pvc-pvc-d04852d6-b138-40be-8fc3-150894a3daac
 
 ```
@@ -206,7 +206,7 @@ NPLB(Network Proxy Load Balancer) -> nginx-php-fpm POD -> AWS RDS
 
 이런구성으로 돌고있었기에 DB를 옮겨왔다.
 
-```
+```text
 #mysqldump mysqldump -h rdsendpoint -u linxuer -p linuxer_blog > linuxerblog.sql #sync rsync root@aws-ec2-ip:/linuxerblog.sql /home/
 
 ```
@@ -214,7 +214,7 @@ NPLB(Network Proxy Load Balancer) -> nginx-php-fpm POD -> AWS RDS
 
 ![](/images/2021/09/image-2-1024x89.png)
 
-```
+```text
 mysql -h cdb-endpoint -u -p linuxer_blog < linuxerblog.sql
 ```
 디비 복구후 wp-config 에서 define('DB_HOST') 를 CDB로 변경했다. 기나긴 트러블 슈팅의 기간이 끝나가고 있었다.
@@ -223,7 +223,7 @@ mysql -h cdb-endpoint -u -p linuxer_blog < linuxerblog.sql
 
 처음부터 SSL은 절대 처리하지 않을것이라 생각했건만...이렇게 된거 Let's encrypt로 간다!
 
-```
+```text
 #certbot install yum install certbot certbot-plagin-route53
 #route53이용한 인증 certbot certonly \\
   --dns-route53 \\
@@ -233,7 +233,7 @@ mysql -h cdb-endpoint -u -p linuxer_blog < linuxerblog.sql
 ```
 인증서에 root ca 가 포함되어있지 않기 때문에 root ca를 서버의 번들 인증서에서 삽입해 줘야한다.
 
-```
+```text
 openssl pkcs7 -inform der -in dstrootcax3.p7c -out dstrootcax3.pem -print_certs cp fullchain.pem fullca.pem cat dstrootcax3.pem >> fullca.pem openssl verify -CAfile fullca.pem cert.pem cert.pem: OK
 
 ```
@@ -247,13 +247,13 @@ openssl pkcs7 -inform der -in dstrootcax3.p7c -out dstrootcax3.pem -print_certs 
 
 이제 드디어 ingress 를 만들 준비가 되었다. ingress 를 만들기 위해 먼저 svc가 필요하다.
 
-```
+```text
 k expose deployment php-fpm-nginx-deployment --type=NodePort --port=80 --target-port=80 --name=php-fpm-nginx-deployment
 k get svc NAME                           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE php-fpm-nginx-deployment-svc   NodePort    198.19.196.141   <none>        80:30051/TCP   24h
 ```
 정상적으로 만들어 진게 확인되면,
 
-```
+```bash
 cat << EOF | k apply -f - apiVersion: extensions/v1beta1 kind: Ingress metadata:
   annotations:
     kubernetes.io/ingress.class: alb

@@ -11,7 +11,7 @@ aliases:
 ---
 
 
-```
+```text
 System Specifications
 CPU: AMD Ryzen 9 9950X3D 16-Core (32 threads, up to 5.75 GHz)
 RAM: 60GB

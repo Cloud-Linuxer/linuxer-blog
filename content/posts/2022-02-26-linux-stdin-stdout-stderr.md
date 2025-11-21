@@ -22,7 +22,7 @@ https://linuxer.name/2022/02/linux-stdin-stdout-stderr-2/
 
 이유는 stderr는 Unbufferd 로 출력만 하기때문이다.
 
-```
+```bash
 # httpd -T | grep http AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.0.10.6. Set the 'ServerName' directive globally to suppress this message (98)Address already in use: AH00072: make_sock: could not bind to address 0.0.0.0:80 no listening sockets available, shutting down AH00015: Unable to open logs
 
 ```
@@ -41,7 +41,7 @@ stderr 는 unbuffer 고 이것을 pipe buffer 를 거쳐 stdin 으로 들어가 
 
 그냥 버퍼까지 올리지 않던 데이터를 리디렉션으로 버퍼에 넣어준다고 생각하자.
 
-```
+```bash
 # httpd -T 2>&1 | grep http AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.0.10.6. Set the 'ServerName' directive globally to suppress this message
 ```
 

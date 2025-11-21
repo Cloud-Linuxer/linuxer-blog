@@ -11,23 +11,23 @@ aliases:
 ---
 
 
-```
+```bash
 helm install sentry sentry/sentry coalesce.go:175: warning: skipped value for kafka.config: Not a table. coalesce.go:175: warning: skipped value for kafka.zookeeper.topologySpreadConstraints: Not a table. W1023 08:00:35.276931   15594 warnings.go:70] spec.template.spec.containers[0].env[39]: hides previous definition of "KAFKA_ENABLE_KRAFT" Error: INSTALLATION FAILED: failed post-install: 1 error occurred:
 
         * job failed: DeadlineExceeded
-```
+```bash
 job failed: DeadlineExceeded 에러가 발생한다.
 
 이 job은 DB가 정상적으로 올라왔는지 확인하는 job이다.
 
-```
+```bash
 k get job
 NAME              COMPLETIONS   DURATION   AGE
 sentry-db-check   0/1           5m23s      5m23s
 ```
 이 Job은 다음을 검증한다.
 
-```
+```text
  name: sentry-db-check
     namespace: sentry
     resourceVersion: "4700657"
@@ -114,10 +114,10 @@ sentry-db-check   0/1           5m23s      5m23s
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
-```
+```bash
 Clickhouse / Kafka 가 실행되어야 job은 정상화 가능하다. 시간이 오래걸리는 작업이므로, hook 의 시간을 늘려주면 job은 더 긴시간 대기한다 helm 의 values.yaml 에서 activeDeadlineSeconds를 늘려주면 된다.
 
-```
+```text
 hooks:
   enabled: true
   removeOnSuccess: true

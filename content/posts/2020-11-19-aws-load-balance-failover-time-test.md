@@ -42,7 +42,7 @@ NLB는 헬스체크 방식이 여러가지다. NLB의 대상그룹을 만들기 
 이제 10초의 인터벌 2회의 임계값을 가지게 되므로 19초에 페일오버가 되어야 한다.
 그런데 이게 잘 안됬다.
 
-```
+```text
 !/bin/sh date +"%y%m%d%H" >> $(date +"%y%m%d%H").txt while true
 do STATUS=$(curl -# -o /dev/null -I -w %{http_code} -s -XGET http://test11-26d09f1385549f3c.elb.ap-northeast-2.amazonaws.com)
 if [ $STATUS -eq 200 ]; then echo 성공 >> $(date +"%y%m%d%H").txt else count=$(($count+1)) echo 실패 >> $(date +"%y%m%d%H").txt fi count=$(($count+1)) echo $count >> $(date +"%y%m%d%H").txt sleep 1
@@ -52,13 +52,13 @@ done
 
 1차 테스트 - 71초
 
-```
+```text
 6 실패 .
 . 77 실패
 ```
 2차 테스트 - 53초
 
-```
+```text
 6 실패 .
 . 59 실패
 ```
@@ -66,7 +66,7 @@ done
 
 전환시간은 최대 79초 까지 걸렸다. 여기서 NLB의 TTL을 확인해 봤다.
 
-```
+```bash
 [root@linuxer home]# nslookup -type=cname -debug http://test11-26d09f1385549f3c.elb.ap-northeast-2.amazonaws.com Server:         10.0.0.2 Address:        10.0.0.2#53
 ------------
     QUESTIONS:

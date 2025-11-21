@@ -15,7 +15,7 @@ aliases:
 
 볼륨 두개를 만들었다
 
-```
+```text
 mount /dev/nvme1n1p1 /mnt/gp3 mount /dev/nvme2n1p1 /mnt/gp2 yum install gcc zlib-devel wget https://codeload.github.com/axboe/fio/tar.gz/fio-3.24 tar zfxv fio-3.24 cd fio-fio-3.24/ ./configure --prefix=/home/fio make; make install
 
 ```
@@ -23,12 +23,12 @@ mount /dev/nvme1n1p1 /mnt/gp3 mount /dev/nvme2n1p1 /mnt/gp2 yum install gcc zlib
 
 fio 는 나도 처음써보는 툴이다
 
-```
+```text
 fio --directory=/mnt/gp3 --name fio_test_file --direct=1 --rw=randread \\ --bs=4K --size=1G --numjobs=7 --time_based --runtime=180 --group_reporting \\ --norandommap
 ```
 3분동안 하나의 스레드가 7개의 1G 파일을 4K 단위로 Direct I/O 모드의 Random Read 로 읽는 테스트이다.
 
-```
+```text
 Jobs: 7 (f=7): [r(7)][100.0%][r=11.7MiB/s][r=3001 IOPS][eta 00m:00s] fio_test_file: (groupid=0, jobs=7): err= 0: pid=2450: Wed Dec  2 06:59:19 2020
   read: IOPS=3016, BW=11.8MiB/s (12.4MB/s)(2121MiB/180004msec)
     clat (usec): min=188, max=296635, avg=2319.05, stdev=1213.65
@@ -59,10 +59,10 @@ Disk stats (read/write):
 
 그럼 로컬 디바이스 테스트 해볼까?
 
-```
+```text
 fio --directory=/mnt/gp2 --name fio_test_file --direct=1 --rw=randread \\ --bs=4K --size=1G --numjobs=7 --time_based --runtime=180 --group_reporting \\ --norandommap
 ```
-```
+```text
 fio-3.24 Starting 7 processes Jobs: 7 (f=7): [r(7)][100.0%][r=11.7MiB/s][r=2997 IOPS][eta 00m:00s] fio_test_file: (groupid=0, jobs=7): err= 0: pid=1316: Wed Dec  2 07:13:16 2020
   read: IOPS=3016, BW=11.8MiB/s (12.4MB/s)(2121MiB/180004msec)
     clat (usec): min=192, max=298525, avg=2318.95, stdev=1162.93
@@ -95,12 +95,12 @@ gp3를 분리하고 테스트한다.
 
 ![](/images/2020/12/image-12.png)
 
-```
+```text
 Jobs: 7 (f=7): [r(7)][75.6%][r=11.7MiB/s][r=3001 IOPS][eta 00m:44s]
 ```
 그럼 gp3연결하고 iops 를 올리고 다시 gp3 에 테스트한다.
 
-```
+```text
 fio-3.24 Starting 7 processes Jobs: 7 (f=7): [r(7)][100.0%][r=23.4MiB/s][r=6002 IOPS][eta 00m:00s] fio_test_file: (groupid=0, jobs=7): err= 0: pid=1393: Wed Dec  2 07:29:50 2020
   read: IOPS=6033, BW=23.6MiB/s (24.7MB/s)(4242MiB/180002msec)
     clat (usec): min=146, max=327858, avg=1158.79, stdev=1152.61
