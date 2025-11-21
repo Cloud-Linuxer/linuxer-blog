@@ -8,11 +8,11 @@ TocOpen: false
 
 # Linuxer
 
-AWS, Linux, Kubernetes 기술 블로그를 운영하는 성실한 운영자입니다.
+AWS, Linux, Kubernetes 기술 블로그를 운영하는 리눅서 입니다.
 
 ## 👨‍💻 경력
 
-- **t'order** (2024 - 현재)
+- **t'order** (2024 - 현재) - DevOps Engineer Team Lead
 - **Milli's Library** (2022 - 2024) - DevOps Engineer Team Lead
 - **NaverCloud** (2021 - 2022) - Cloud Solutions Architect
 - **Hostcenter** (2010 - 2021) - System Engineer, Solutions Architect
@@ -20,16 +20,10 @@ AWS, Linux, Kubernetes 기술 블로그를 운영하는 성실한 운영자입�
 ## 🎯 전문 분야
 
 ### Cloud & Infrastructure
-- **AWS** - 전체 자격증 취득 (Solutions Architect, DevOps, Security, Database, Machine Learning 등)
+- **AWS** - AWS All Certification X 15
 - **Kubernetes** - 깊이 있는 이해와 실무 경험 (CKA, CKAD 자격증 보유)
 - **Public Cloud** - AWS, GCP, Azure, NCP 멀티 클라우드 아키텍처 설계
 - **Operating Systems** - Linux/Windows 시스템 깊이 있는 이해
-
-### DevOps & Automation
-- Infrastructure as Code
-- CI/CD Pipeline 구축
-- Container Orchestration
-- Cloud Cost Optimization
 
 ## 📚 저서
 
@@ -81,21 +75,6 @@ AWS, Linux, Kubernetes 기술 블로그를 운영하는 성실한 운영자입�
 ### FinOps
 - FinOps Certified Practitioner (2023)
 
-## 📖 블로그 주제
-
-- AWS 클라우드 아키텍처 및 최적화
-- Kubernetes 운영 및 베스트 프랙티스
-- Linux 시스템 관리 및 트러블슈팅
-- DevOps 자동화 및 CI/CD
-- 자격증 취득 후기 및 학습 가이드
-- 클라우드 비용 최적화 (FinOps)
-- Multi-Cloud 전략 및 구현
-
-## 🔗 링크
-
-- **GitHub**: [@Cloud-Linuxer](https://github.com/Cloud-Linuxer)
-- **Blog**: [hugo.linuxer.name](https://hugo.linuxer.name)
-
 ---
 
-*AWS, Linux, Kubernetes를 사랑하는 기술 블로거*
+*기술을 사랑하는 엔지니어*
