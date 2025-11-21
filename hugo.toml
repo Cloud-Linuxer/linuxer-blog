@@ -33,6 +33,11 @@ theme = 'PaperMod'
   url = "https://www.linkedin.com/in/taehwan-jeong-274846190/"
 
 [[params.socialIcons]]
+  name = "other"
+  title = "KakaoTalk"
+  url = "https://open.kakao.com/o/gMCqYXxb"
+
+[[params.socialIcons]]
   name = "email"
   url = "mailto:linuxer.name@gmail.com"
 
