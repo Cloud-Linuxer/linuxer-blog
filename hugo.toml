@@ -16,7 +16,7 @@ theme = 'PaperMod'
   hideMeta = false
   hideMetaInList = false
   defaultTheme = "dark"
-  disableThemeToggle = false
+  disableThemeToggle = true
   summaryLength = 70
   ShowSearch = true
 
