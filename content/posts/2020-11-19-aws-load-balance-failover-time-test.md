@@ -42,31 +42,31 @@ NLB는 헬스체크 방식이 여러가지다. NLB의 대상그룹을 만들기 
 이제 10초의 인터벌 2회의 임계값을 가지게 되므로 19초에 페일오버가 되어야 한다.
 그런데 이게 잘 안됬다.
 
-```
+```bash
 !/bin/sh date +"%y%m%d%H" >> $(date +"%y%m%d%H").txt while true
 do STATUS=$(curl -# -o /dev/null -I -w %{http_code} -s -XGET http://test11-26d09f1385549f3c.elb.ap-northeast-2.amazonaws.com)
 if [ $STATUS -eq 200 ]; then echo 성공 >> $(date +"%y%m%d%H").txt else count=$(($count+1)) echo 실패 >> $(date +"%y%m%d%H").txt fi count=$(($count+1)) echo $count >> $(date +"%y%m%d%H").txt sleep 1
 done
-```
+```bash
 위 스크립트로 1초마다 사이트를 호출해서 상태코드가 200이면 성공 그외엔 실패를 찍게된다. 그리고 1번 돌때마다 카운트를 1씩 더 한다.
 
 1차 테스트 - 71초
 
-```
+```bash
 6 실패 .
 . 77 실패
-```
+```bash
 2차 테스트 - 53초
 
-```
+```bash
 6 실패 .
 . 59 실패
-```
+```bash
 이후 테스트들은 대부분 비슷한 시간 50~79초 사이에 페일오버 되었다.
 
 전환시간은 최대 79초 까지 걸렸다. 여기서 NLB의 TTL을 확인해 봤다.
 
-```
+```bash
 [root@linuxer home]# nslookup -type=cname -debug http://test11-26d09f1385549f3c.elb.ap-northeast-2.amazonaws.com Server:         10.0.0.2 Address:        10.0.0.2#53
 ------------
     QUESTIONS:
@@ -83,7 +83,7 @@ done
         minimum = 60
         ttl = 33
     ADDITIONAL RECORDS: ------------
-```
+```bash
 nslookup -type=cname -debug http://test11-26d09f1385549f3c.elb.ap-northeast-2.amazonaws.com
 
 명령어로 확인시에 TTL 이 minimum = 60으로 페일오버될때 까지 ttl 이 모두 소모될때까지 기다려야 페일 오버가 가능하다. 조금 이해가 안가는 부분이 있는데..이부분은 AWS 내부로직이라 추측을 했다.

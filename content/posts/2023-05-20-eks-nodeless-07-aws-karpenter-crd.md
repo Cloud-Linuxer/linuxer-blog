@@ -20,7 +20,7 @@ Karpenter Component 를 설명할때 CRD를 설명했었다.
 
 먼저 **`provisioners`** 를 이야기 해볼까 한다.
 
-```
+```yaml
 apiVersion: karpenter.sh/v1alpha5 kind: Provisioner metadata:
   name: default spec:
   requirements:
@@ -34,7 +34,7 @@ apiVersion: karpenter.sh/v1alpha5 kind: Provisioner metadata:
       values: ["2"]
   providerRef:
     name: default
-```
+```bash
 <https://karpenter.sh/v0.27.3/concepts/provisioners/>
 
 <https://github.com/aws/karpenter/tree/main/examples>
@@ -45,14 +45,14 @@ apiVersion: karpenter.sh/v1alpha5 kind: Provisioner metadata:
 
 <https://karpenter.sh/v0.27.5/concepts/node-templates/>
 
-```
+```yaml
 apiVersion: karpenter.k8s.aws/v1alpha1 kind: AWSNodeTemplate metadata:
   name: default spec:
   subnetSelector:
     karpenter.sh/discovery: "${CLUSTER_NAME}"
   securityGroupSelector:
     karpenter.sh/discovery: "${CLUSTER_NAME}"
-```
+```bash
 **`awsnodetemplates`** 은 필수 요소들이 있다. 그것이 Subnet / SecurityGroup 다.
 서브넷 셀렉터는 subnet-id 혹은 서브넷에 연결된 특정 태그로 동작한다.
 보안그룹또한 ID혹은 특정 태그다.

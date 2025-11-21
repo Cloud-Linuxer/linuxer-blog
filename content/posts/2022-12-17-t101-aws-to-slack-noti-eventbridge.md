@@ -31,7 +31,7 @@ CloudTrail 에서 발생하는 이벤트를 EventBridge 는 특정 패턴을 감
 
 아래 예가 그렇다.
 
-```
+```bash
 {
   "source": ["aws.iam", "aws.ec2"],
   "detail-type": ["AWS API Call via CloudTrail"],
@@ -39,7 +39,7 @@ CloudTrail 에서 발생하는 이벤트를 EventBridge 는 특정 패턴을 감
     "eventSource": ["iam.amazonaws.com", "ec2.amazonaws.com"],
     "eventName": ["AttachGroupPolicy", "AttachRolePolicy", "AttachUserPolicy", "ChangePassword", "CreateAccessKey", "CreateGroup", "CreatePolicy", "CreateRole", "CreateUser", "DeleteAccessKey", "DeleteGroup", "DeleteGroupPolicy", "DeletePolicy", "DeleteRole", "DeleteRolePolicy", "DeleteUser", "DeleteUserPolicy", "DetachGroupPolicy", "DetachRolePolicy", "DetachUserPolicy", "PutGroupPolicy", "PutRolePolicy", "PutUserPolicy", "AuthorizeSecurityGroupIngress", "AuthorizeSecurityGroupEgress", "RevokeSecurityGroupIngress", "RevokeSecurityGroupEgress"]
   } }
-```
+```bash
 AWS ec2와 iam에서 발생하는 특정 패턴을 감지하여 이벤트를 발생시키는것이다.
 
 여기에서 내가 굉장히 많은시간 고민을했다. 이유는 패턴 때문이다. 내가 감지하고 싶은 패턴은 AWSConsoleLogin 이다. 이 API가 속하는 source 와 detail-type 이 정리된 곳이 없었기 때문이다. 또한 EventBridge에서 템플릿으로 제공하는 이벤트 패턴으로 테스트했을 땐 잘되지 않았다. 고민했던 부분은 총 3가지 였다.
@@ -49,11 +49,11 @@ source / detail-type / detail 이렇게 세가지이다.
 
 두번째 문제는 Trail에 찍히는 로그와 EventBridge 에 전달되는 이벤트의 내용이 다르다.
 
-```
+```bash
 { 'version':'0', 'id':'1', 'detail-type':'AWS Console Sign In via CloudTrail', 'source':'aws.signin', 'account':'1', 'time':'2022-12-17T01:09:08Z', 'region':'ap-northeast-2', 'resources':[ ], 'detail':{ 'eventVersion':'1.08', 'userIdentity':{ 'type':'IAMUser', 'principalId':'1', 'accountId':'1', 'accessKeyId':'', 'userName':'1' }, 'eventTime':'2022-12-17T01:09:08Z', 'eventSource':'signin.amazonaws.com', 'eventName':'CheckMfa', 'awsRegion':'ap-northeast-2', 'sourceIPAddress':'58.227.0.134', 'userAgent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.5249.114 Safari/537.36', 'requestParameters':None, 'responseElements':{ 'CheckMfa':'Success' }, 'additionalEventData':{ 'MfaType':'Virtual MFA' }, 'eventID':'1', 'readOnly':False, 'eventType':'AwsConsoleSignIn', 'managementEvent':True, 'recipientAccountId':'1', 'eventCategory':'Management', 'tlsDetails':{ 'tlsVersion':'TLSv1.2', 'cipherSuite':'ECDHE-RSA-AES128-GCM-SHA256', 'clientProvidedHostHeader':'ap-northeast-2.signin.aws.amazon.com' }
 } }
 ```
-```
+```bash
 {
     "eventVersion": "1.08",
     "userIdentity": {
@@ -90,7 +90,7 @@ source / detail-type / detail 이렇게 세가지이다.
         "cipherSuite": "1",
         "clientProvidedHostHeader": "signin.aws.amazon.com"
     } }
-```
+```bash
 민감 정보는 지웠다. 이렇게 두가지 내용이 다르다. 처음에 Trail Log를 보고서 패턴을 작성하다가 놀랐다. 그리고 이 이벤트를 보려면 이벤트 브릿지에선 넘어온 데이터를 볼수없다. 이벤트 카운트 뿐이다.
 
 세번째는 리전에 대한 이야기다.
@@ -125,7 +125,7 @@ IAM > 계정설정 > 엔드포인트
 
 위에서 로그인 URL에 도쿄리전으로 파라미터가 들어가있는데 그 대로 로그인 해보겠다. 그전에 나의 계정에선 도쿄의 STS 엔드포인트를 비활성화하였다.
 
-```
+```bash
 {
     "eventVersion": "1.08",
     "userIdentity": {
@@ -162,7 +162,7 @@ IAM > 계정설정 > 엔드포인트
         "cipherSuite": "ECDHE-RSA-AES128-GCM-SHA256",
         "clientProvidedHostHeader": "signin.aws.amazon.com"
     } }
-```
+```bash
 로그 보면 이렇다. LoginTo 에서는 ap-northeast-1 로 로그인했으나, 실제 리전은 us-east-1 로 연결되었다. 글로벌서비스 STS로 연결된것이다. 아마 가까운 리전엔드포인트를 제공해주는것으로 보는데 실제로는 잘모른다.
 
 이렇게 세가지의 고민을 끝내고 Trail의 추적을 생성하였는데, 문제를 찾을수 있었다.
@@ -185,9 +185,9 @@ IAM > 계정설정 > 엔드포인트
 
 글로벌 서비스 추적을 만들려면 AWSCLI를 이용해서 만들어야 한다.
 
-```
+```bash
 # aws cloudtrail update-trail --name my-trail --no-include-global-service-events
-```
+```bash
 <https://docs.aws.amazon.com/ko_kr/awscloudtrail/latest/userguide/cloudtrail-create-and-update-a-trail-by-using-the-aws-cli-update-trail.html#cloudtrail-create-and-update-a-trail-by-using-the-aws-cli-examples-gses>
 
 EventBridge 와 Trail에 대한 삽질기를 이렇게 정리해둔다.

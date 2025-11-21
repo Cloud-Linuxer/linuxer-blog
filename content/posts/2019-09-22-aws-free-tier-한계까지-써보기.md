@@ -26,11 +26,11 @@ t2.micro 사이즈 의 rds 의 max_connections는 134 인데 50까지 밖에 안
 
 php-fpm에서 문제를 확인할수 있었는데 바로 알게된 이유는 apache의 제한은 그보다 크게 설정되어있기 때문이다.
 
-```
+```bash
 $cat /etc/php-fpm.d/www.conf | grep pm.max_children
 pm.max_children = 50 => 150
 $systemctl restart php-fpm
-```
+```bash
 php-fpm 에서 사용할수 있는 자식프로세스 개수를 150개로 변경하였다.
 
 이만하면 충분히 web 인스턴스를 죽일수 있을거라 생각된다.
