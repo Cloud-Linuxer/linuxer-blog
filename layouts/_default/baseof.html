@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language }}" dir="{{ .Language.LanguageDirection | default "auto" }}">
+
+<head>
+    {{- partial "head.html" . }}
+</head>
+
+<body class="
+{{- if (or (ne .Kind `page` ) (eq .Layout `archives`) (eq .Layout `search`)) -}}
+{{- print "list" -}}
+{{- end -}}
+{{- if eq site.Params.defaultTheme `dark` -}}
+{{- print " dark" }}
+{{- end -}}
+" id="top">
+    {{- partialCached "header.html" . .Page -}}
+
+    <div class="main-wrapper" style="display: flex; max-width: 1200px; margin: 0 auto; padding: 0 16px;">
+        <!-- Sidebar for Categories -->
+        <aside class="sidebar" style="
+            width: 250px;
+            margin-right: 24px;
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+        ">
+            <div class="sidebar-content" style="
+                background: var(--entry);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 20px;
+            ">
+                <h3 style="
+                    font-family: 'IBM Plex Mono', monospace;
+                    color: var(--terminal-green, #00ff41);
+                    margin: 0 0 16px 0;
+                    font-size: 18px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                ">
+                    📂 Categories
+                </h3>
+
+                <nav class="category-nav">
+                    {{- range $name, $taxonomy := .Site.Taxonomies.categories }}
+                    {{- $count := len $taxonomy.Pages }}
+                    <a href="{{ "/categories/" | relLangURL }}{{ $name | urlize }}" class="category-item" style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 8px 12px;
+                        margin: 4px 0;
+                        border-radius: 6px;
+                        text-decoration: none;
+                        color: var(--primary);
+                        transition: all 0.2s ease;
+                        border: 1px solid transparent;
+                    ">
+                        <span style="text-transform: capitalize; font-size: 14px;">{{ $name }}</span>
+                        <span class="category-count" style="
+                            background: var(--terminal-green, #00ff41);
+                            color: var(--theme, #0a0e14);
+                            padding: 2px 6px;
+                            border-radius: 10px;
+                            font-size: 11px;
+                            font-weight: 600;
+                            min-width: 20px;
+                            text-align: center;
+                        ">{{ $count }}</span>
+                    </a>
+                    {{- end }}
+                </nav>
+
+                <!-- Tags section -->
+                <h3 style="
+                    font-family: 'IBM Plex Mono', monospace;
+                    color: var(--terminal-cyan, #00d9ff);
+                    margin: 24px 0 16px 0;
+                    font-size: 18px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                ">
+                    🏷️ Popular Tags
+                </h3>
+
+                <div class="tag-cloud" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    {{- range $name, $taxonomy := .Site.Taxonomies.tags }}
+                    {{- if gt (len $taxonomy.Pages) 2 }}
+                    <a href="{{ "/tags/" | relLangURL }}{{ $name | urlize }}" class="tag-pill" style="
+                        padding: 4px 10px;
+                        background: rgba(0, 217, 255, 0.1);
+                        border: 1px solid var(--terminal-cyan, #00d9ff);
+                        color: var(--terminal-cyan, #00d9ff);
+                        border-radius: 12px;
+                        font-size: 12px;
+                        text-decoration: none;
+                        transition: all 0.2s ease;
+                    ">{{ $name }}</a>
+                    {{- end }}
+                    {{- end }}
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="main" style="flex: 1; min-width: 0;">
+            {{- block "main" . }}{{ end }}
+        </main>
+    </div>
+
+    {{ if (not site.Params.disableScrollToTop) }}
+    <a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+            <path d="M12 6H0l6-6z" />
+        </svg>
+    </a>
+    {{- end }}
+
+    {{- partial "footer.html" . -}}
+
+    <!-- Sidebar styles -->
+    <style>
+        /* Hide sidebar on mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none !important;
+            }
+            .main-wrapper {
+                display: block !important;
+            }
+        }
+
+        /* Category hover effects */
+        [data-theme="dark"] .category-item:hover {
+            background: rgba(0, 255, 65, 0.1);
+            border-color: var(--terminal-green, #00ff41);
+        }
+
+        [data-theme="light"] .category-item:hover {
+            background: rgba(0, 102, 255, 0.1);
+            border-color: #0066ff;
+        }
+
+        /* Tag hover effects */
+        [data-theme="dark"] .tag-pill:hover {
+            background: var(--terminal-cyan, #00d9ff);
+            color: var(--theme, #0a0e14);
+            transform: translateY(-2px);
+        }
+
+        [data-theme="light"] .tag-pill:hover {
+            background: #0066ff;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Scrollbar styling for sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: var(--theme);
+        }
+
+        [data-theme="dark"] .sidebar::-webkit-scrollbar-thumb {
+            background: var(--terminal-green, #00ff41);
+            border-radius: 4px;
+        }
+
+        [data-theme="light"] .sidebar::-webkit-scrollbar-thumb {
+            background: #0066ff;
+            border-radius: 4px;
+        }
+    </style>
+</body>
+
+</html>
