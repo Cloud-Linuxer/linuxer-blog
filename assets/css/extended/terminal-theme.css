@@ -825,3 +825,29 @@ code, pre, kbd, samp {
     pointer-events: auto !important;
     z-index: 10 !important;
 }
+
+/* Fix: Top button styling - MUST be fixed size */
+.top-link {
+    width: 42px !important;
+    height: 42px !important;
+    max-width: 42px !important;
+    min-width: 42px !important;
+    position: fixed !important;
+    bottom: 60px !important;
+    right: 30px !important;
+    padding: 12px !important;
+    border-radius: 64px !important;
+    display: block !important;
+    box-sizing: border-box !important;
+}
+
+/* Dark mode specific styling */
+[data-theme="dark"] .top-link {
+    background: var(--terminal-green) !important;
+    opacity: 0.8;
+}
+
+[data-theme="dark"] .top-link:hover {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+}
