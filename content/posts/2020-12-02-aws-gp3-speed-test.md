@@ -15,20 +15,20 @@ aliases:
 
 볼륨 두개를 만들었다
 
-```bash
+```
 mount /dev/nvme1n1p1 /mnt/gp3 mount /dev/nvme2n1p1 /mnt/gp2 yum install gcc zlib-devel wget https://codeload.github.com/axboe/fio/tar.gz/fio-3.24 tar zfxv fio-3.24 cd fio-fio-3.24/ ./configure --prefix=/home/fio make; make install
 
-```bash
+```
 필요한 라이브러리 gcc, zlib-devel 설치후 컴파일.
 
 fio 는 나도 처음써보는 툴이다
 
-```bash
+```
 fio --directory=/mnt/gp3 --name fio_test_file --direct=1 --rw=randread \\ --bs=4K --size=1G --numjobs=7 --time_based --runtime=180 --group_reporting \\ --norandommap
-```bash
+```
 3분동안 하나의 스레드가 7개의 1G 파일을 4K 단위로 Direct I/O 모드의 Random Read 로 읽는 테스트이다.
 
-```bash
+```
 Jobs: 7 (f=7): [r(7)][100.0%][r=11.7MiB/s][r=3001 IOPS][eta 00m:00s] fio_test_file: (groupid=0, jobs=7): err= 0: pid=2450: Wed Dec  2 06:59:19 2020
   read: IOPS=3016, BW=11.8MiB/s (12.4MB/s)(2121MiB/180004msec)
     clat (usec): min=188, max=296635, avg=2319.05, stdev=1213.65
@@ -54,15 +54,15 @@ Run status group 0 (all jobs):
    READ: bw=11.8MiB/s (12.4MB/s), 11.8MiB/s-11.8MiB/s (12.4MB/s-12.4MB/s), io=2121MiB (2224MB), run=180004-180004msec
 Disk stats (read/write):
   nvme1n1: ios=542478/13, merge=0/3, ticks=1253070/0, in_queue=1078350, util=99.97%
-```bash
+```
 정확히 3000iops 가 나온다.
 
 그럼 로컬 디바이스 테스트 해볼까?
 
-```bash
+```
 fio --directory=/mnt/gp2 --name fio_test_file --direct=1 --rw=randread \\ --bs=4K --size=1G --numjobs=7 --time_based --runtime=180 --group_reporting \\ --norandommap
 ```
-```bash
+```
 fio-3.24 Starting 7 processes Jobs: 7 (f=7): [r(7)][100.0%][r=11.7MiB/s][r=2997 IOPS][eta 00m:00s] fio_test_file: (groupid=0, jobs=7): err= 0: pid=1316: Wed Dec  2 07:13:16 2020
   read: IOPS=3016, BW=11.8MiB/s (12.4MB/s)(2121MiB/180004msec)
     clat (usec): min=192, max=298525, avg=2318.95, stdev=1162.93
@@ -88,19 +88,19 @@ Run status group 0 (all jobs):
    READ: bw=11.8MiB/s (12.4MB/s), 11.8MiB/s-11.8MiB/s (12.4MB/s-12.4MB/s), io=2121MiB (2224MB), run=180004-180004msec
 Disk stats (read/write):
   nvme2n1: ios=542683/0, merge=0/0, ticks=1253810/0, in_queue=1076380, util=99.74%
-```bash
+```
 엥 결과가 같다..왜지? 3000iops 로 고정된다 gp2인데..
 
 gp3를 분리하고 테스트한다.
 
 ![](/images/2020/12/image-12.png)
 
-```bash
+```
 Jobs: 7 (f=7): [r(7)][75.6%][r=11.7MiB/s][r=3001 IOPS][eta 00m:44s]
-```bash
+```
 그럼 gp3연결하고 iops 를 올리고 다시 gp3 에 테스트한다.
 
-```bash
+```
 fio-3.24 Starting 7 processes Jobs: 7 (f=7): [r(7)][100.0%][r=23.4MiB/s][r=6002 IOPS][eta 00m:00s] fio_test_file: (groupid=0, jobs=7): err= 0: pid=1393: Wed Dec  2 07:29:50 2020
   read: IOPS=6033, BW=23.6MiB/s (24.7MB/s)(4242MiB/180002msec)
     clat (usec): min=146, max=327858, avg=1158.79, stdev=1152.61
@@ -126,7 +126,7 @@ Run status group 0 (all jobs):
    READ: bw=23.6MiB/s (24.7MB/s), 23.6MiB/s-23.6MiB/s (24.7MB/s-24.7MB/s), io=4242MiB (4448MB), run=180002-180002msec
 Disk stats (read/write):
   nvme2n1: ios=1085375/0, merge=0/0, ticks=1249280/0, in_queue=1077940, util=100.00%
-```bash
+```
 gp3의 iops 가 올라간건 확인이 된다.
 
 정리하자면 gp2의 성능테스트시에 iops 가 3000으로 고정된다. 아마 대역폭기반 계산이라 정확하게 3000으로 측정되어 실제 디스크의 iops 가 아닌거 같다.

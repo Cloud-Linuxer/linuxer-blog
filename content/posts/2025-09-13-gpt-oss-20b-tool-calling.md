@@ -11,7 +11,7 @@ aliases:
 ---
 
 
-```text
+```
 System Specifications
 CPU: AMD Ryzen 9 9950X3D 16-Core (32 threads, up to 5.75 GHz)
 RAM: 60GB
@@ -19,7 +19,7 @@ GPU: NVIDIA GeForce RTX 5090 (32GB VRAM, CUDA 12.9)
 Storage: 1.9TB (1.5TB available)
 OS: Fedora Linux 42 Server Edition
 Kernel: 6.15.10
-```bash
+```
 
 이스펙으로 gpt-oss-20b 모델을 구동하고 테스트했다.
 그냥 단순 부하 테스트로는 gpt-oss-20b 모델을 vllm 으로 실행했을때 90rps 까지 처리하고 초당 토큰을 생성하는 속도는 4000토큰 정도 생성했다.
