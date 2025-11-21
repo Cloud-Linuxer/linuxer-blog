@@ -60,12 +60,23 @@ theme = 'PaperMod'
   url = "/tags/"
   weight = 40
 
-[markup.highlight]
-  codeFences = true
-  guessSyntax = true
-  lineNos = false
-  lineNumbersInTable = false
-  style = "dracula"
+[markup]
+  defaultMarkdownHandler = "goldmark"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = false
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = []
+          inline = []
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    lineNumbersInTable = false
+    style = "dracula"
 
 [taxonomies]
   category = 'categories'

@@ -28,7 +28,7 @@ yum 으로 도커를 설치할건데, 몇가지를 선택해야 한다.
 
 Docker를 사용하기 위해선 6개의 패키지가 필요하다.
 
-```
+```bash
 [root@linuxer ~ ]# yum install -y docker
 (1/6): container-selinux-2.119.2-1.911c772.el7_8.noarch.rpm
 |  40 kB  00:00:00
@@ -49,7 +49,7 @@ docker 만 설치해도 의존성으로 도커를 사용하기위한 패키지�
 
 docker-ce repo 에서 지원하는 패키지를 확인해보면 이렇다.
 
-```
+```bash
 [root@linuxer ~ ]# yum install -y docker-ce
 (1/6): container-selinux-2.119.2-1.911c772.el7_8.noarch.rpm
 |  40 kB  00:00:00
@@ -77,10 +77,10 @@ docker run -d -p 8080:80 ngnix 명령어로 도커를 실행했다.
 
 그리고 도커를 실행중인 호스트에서 ps 명령어를 쳤다.
 
-```
+```bash
 [root@linuxer ~ ]# ps afxuwww
 /usr/bin/containerd-shim-runc-v2 -namespace moby -id
-\\_ nginx: master process nginx -g daemon off; \\_ nginx: worker process \\_ nginx: worker process
+|- nginx: master process nginx -g daemon off; |- nginx: worker process |- nginx: worker process
 ```
 ps afxuwww 명령어에서 보기쉽게 트리만 떼온 상태다. containerd-shim-runc 데몬이 nginx를 실행중인것을 알 수 있다. 이것만으로도 컨테이너는 프로세스다. 라는것을 알수있다.
 
@@ -94,7 +94,7 @@ ps afxuwww 명령어에서 보기쉽게 트리만 떼온 상태다. containerd-s
 
 근래에 내가 만든 도커파일은 이렇다.
 
-```
+```dockerfile
 FROM centos:7 LABEL maintainer "linuxer<linuxer@linuxer.name>" LABEL "purpose"="practice" ENV PATH /opt/remi/php80/root/usr/sbin:$PATH RUN yum -y update RUN yum -y install epel-release RUN yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm RUN yum -y install nginx php80-php-fpm RUN mkdir /var/run/php RUN mkdir /root/bin ADD www.conf /etc/opt/remi/php80/php-fpm.d/ ADD php.ini /etc/opt/remi/php80/ ADD nginx.conf /etc/nginx/ ADD index.php /usr/share/nginx/html/ ADD start.sh /root/bin/ RUN chmod 755 /root/bin/start.sh WORKDIR /usr/share/nginx/html/ EXPOSE 80 CMD ["/bin/bash", "-c", "/root/bin/start.sh"]
 ```
 ngnix와 php80 버전을 합친 Dockerfile이다.
@@ -107,7 +107,7 @@ CMD ["php-fpm", "-f", "&", "nginx", "-g", "daemon", "off"]
 
 이런짓까지.. 하지만 실패했고 결국 스크립트를 작성하여 실행하도록 하고 **fg %1** 과같은 명령어를 썼다.
 
-```
+```bash
 [root@linuxer ~ ]# cat start.sh
 #!/bin/bash set -m /opt/remi/php80/root/usr/sbin/php-fpm --nodaemonize \\ --fpm-config /etc/opt/remi/php80/php-fpm.conf & \\ /usr/sbin/nginx fg %1
 ```
@@ -115,17 +115,17 @@ CMD ["php-fpm", "-f", "&", "nginx", "-g", "daemon", "off"]
 
 이렇게 완성한 컨테이너 를 실행해 보면
 
-```
+```bash
 [root@linuxer ~ ]# ps afxuwww /usr/bin/containerd-shim-runc-v2 -namespace moby -id 4
-      \\_ php-fpm: master process (/etc/opt/remi/php80/php-fpm.conf)
-      |   \\_ php-fpm: pool www
-      |   \\_ php-fpm: pool www
-      |   \\_ php-fpm: pool www
-      |   \\_ php-fpm: pool www
-      |   \\_ php-fpm: pool www
-      \\_ nginx: master process /usr/sbin/nginx
-          \\_ nginx: worker process
-          \\_ nginx: worker process
+      |- php-fpm: master process (/etc/opt/remi/php80/php-fpm.conf)
+      |   |- php-fpm: pool www
+      |   |- php-fpm: pool www
+      |   |- php-fpm: pool www
+      |   |- php-fpm: pool www
+      |   |- php-fpm: pool www
+      |- nginx: master process /usr/sbin/nginx
+          |- nginx: worker process
+          |- nginx: worker process
 
 ```
 두개의 부모프로세스를 가진 컨테이너를 확인할수 있다.
