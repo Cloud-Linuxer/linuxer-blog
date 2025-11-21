@@ -907,12 +907,12 @@ body.dark {
     display: block !important;
 }
 
-/* Step 1: Disable clicks on ALL children except entry-link */
-.dark .post-entry * {
+/* Step 1: Disable clicks on ALL children except entry-link - but NOT in search results */
+.dark .main:not(.search) .post-entry * {
     pointer-events: none !important;
 }
 
-.light .post-entry * {
+.light .main:not(.search) .post-entry * {
     pointer-events: none !important;
 }
 
@@ -923,6 +923,16 @@ body.dark {
 }
 
 .light .entry-link {
+    pointer-events: auto !important;
+    z-index: 10 !important;
+}
+
+/* Step 3: Enable clicks in search results */
+#searchResults .post-entry * {
+    pointer-events: auto !important;
+}
+
+#searchResults .post-entry a {
     pointer-events: auto !important;
     z-index: 10 !important;
 }
