@@ -25,6 +25,7 @@
             height: fit-content;
             max-height: calc(100vh - 100px);
             overflow-y: auto;
+            order: 0;
         ">
             <div class="sidebar-content" style="
                 background: var(--entry);
@@ -32,9 +33,8 @@
                 border-radius: 8px;
                 padding: 20px;
             ">
-                <h3 style="
+                <h3 class="sidebar-title categories-title" style="
                     font-family: 'IBM Plex Mono', monospace;
-                    color: var(--terminal-green, #00ff41);
                     margin: 0 0 16px 0;
                     font-size: 18px;
                     display: flex;
@@ -61,8 +61,6 @@
                     ">
                         <span style="text-transform: capitalize; font-size: 14px;">{{ $name }}</span>
                         <span class="category-count" style="
-                            background: var(--terminal-green, #00ff41);
-                            color: var(--theme, #0a0e14);
                             padding: 2px 6px;
                             border-radius: 10px;
                             font-size: 11px;
@@ -75,9 +73,8 @@
                 </nav>
 
                 <!-- Tags section -->
-                <h3 style="
+                <h3 class="sidebar-title tags-title" style="
                     font-family: 'IBM Plex Mono', monospace;
-                    color: var(--terminal-cyan, #00d9ff);
                     margin: 24px 0 16px 0;
                     font-size: 18px;
                     display: flex;
@@ -92,9 +89,6 @@
                     {{- if gt (len $taxonomy.Pages) 2 }}
                     <a href="{{ "/tags/" | relLangURL }}{{ $name | urlize }}" class="tag-pill" style="
                         padding: 4px 10px;
-                        background: rgba(0, 217, 255, 0.1);
-                        border: 1px solid var(--terminal-cyan, #00d9ff);
-                        color: var(--terminal-cyan, #00d9ff);
                         border-radius: 12px;
                         font-size: 12px;
                         text-decoration: none;
@@ -107,7 +101,7 @@
         </aside>
 
         <!-- Main content area -->
-        <main class="main" style="flex: 1; min-width: 0;">
+        <main class="main" style="flex: 1; min-width: 0; order: 1;">
             {{- block "main" . }}{{ end }}
         </main>
     </div>
@@ -134,28 +128,70 @@
             }
         }
 
+        /* Dark mode colors */
+        [data-theme="dark"] .categories-title {
+            color: #00ff41;
+        }
+
+        [data-theme="dark"] .tags-title {
+            color: #00d9ff;
+        }
+
+        [data-theme="dark"] .category-count {
+            background: #00ff41;
+            color: #0a0e14;
+        }
+
+        [data-theme="dark"] .tag-pill {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid #00d9ff;
+            color: #00d9ff;
+        }
+
+        /* Light mode colors */
+        [data-theme="light"] .categories-title {
+            color: #0066ff;
+        }
+
+        [data-theme="light"] .tags-title {
+            color: #0099cc;
+        }
+
+        [data-theme="light"] .category-count {
+            background: #0066ff;
+            color: white;
+        }
+
+        [data-theme="light"] .tag-pill {
+            background: rgba(0, 102, 255, 0.1);
+            border: 1px solid #0066ff;
+            color: #0066ff;
+        }
+
         /* Category hover effects */
         [data-theme="dark"] .category-item:hover {
             background: rgba(0, 255, 65, 0.1);
-            border-color: var(--terminal-green, #00ff41);
+            border-color: #00ff41 !important;
         }
 
         [data-theme="light"] .category-item:hover {
             background: rgba(0, 102, 255, 0.1);
-            border-color: #0066ff;
+            border-color: #0066ff !important;
         }
 
         /* Tag hover effects */
         [data-theme="dark"] .tag-pill:hover {
-            background: var(--terminal-cyan, #00d9ff);
-            color: var(--theme, #0a0e14);
+            background: #00ff41;
+            color: #0a0e14;
             transform: translateY(-2px);
+            border-color: #00ff41;
         }
 
         [data-theme="light"] .tag-pill:hover {
             background: #0066ff;
             color: white;
             transform: translateY(-2px);
+            border-color: #0066ff;
         }
 
         /* Scrollbar styling for sidebar */
@@ -168,7 +204,7 @@
         }
 
         [data-theme="dark"] .sidebar::-webkit-scrollbar-thumb {
-            background: var(--terminal-green, #00ff41);
+            background: #00ff41;
             border-radius: 4px;
         }
 
