@@ -907,33 +907,44 @@ body.dark {
     display: block !important;
 }
 
-/* Step 1: Disable clicks on ALL children except entry-link - but NOT in search results */
-.dark .main:not(.search) .post-entry * {
+/* Disable pointer events on decorative elements */
+.dark .post-entry::before,
+.dark .post-entry::after,
+.light .post-entry::before,
+.light .post-entry::after {
     pointer-events: none !important;
 }
 
-.light .main:not(.search) .post-entry * {
-    pointer-events: none !important;
-}
-
-/* Step 2: Re-enable clicks ONLY on entry-link */
-.dark .entry-link {
+/* Ensure links are always clickable */
+.dark .post-entry a,
+.light .post-entry a {
     pointer-events: auto !important;
+    position: relative;
     z-index: 10 !important;
 }
 
+/* Special handling for entry-link (main post links) */
+.dark .entry-link,
 .light .entry-link {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
     pointer-events: auto !important;
-    z-index: 10 !important;
+    z-index: 5 !important;
 }
 
-/* Step 3: Enable clicks in search results */
-#searchResults .post-entry * {
-    pointer-events: auto !important;
-}
-
+/* Ensure search results are clickable */
 #searchResults .post-entry a {
     pointer-events: auto !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
     z-index: 10 !important;
 }
 
