@@ -27,7 +27,7 @@ The S3 storage engine is included in source code distributions of MariaDB Commun
 
 mariadb 컴파일은 생각보다 엄청 오래걸린다. T2.micro 사이즈 기준으로 2시간정도.. 너무 느리다 생각되면 인스턴스 사이즈를 컴파일 할때만 잠깐 늘리거나 인스턴스가 터지지 않게 swap 을 늘려주자.
 
-/posts/2019-09-07-file-swap-만들기/
+https://www.linuxer.name/posts/2019-09-07-file-swap-만들기/
 
 이전에 포스팅한 swap 만들기가 있다. 참고하자.
 

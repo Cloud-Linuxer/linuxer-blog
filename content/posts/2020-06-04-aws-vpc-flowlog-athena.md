@@ -17,7 +17,7 @@ VPC에서 아웃바운드로 향하는 모든포트를 확인해야하는 일이
 
 아래는 이전의 방법으로 확인한 포스팅이다.
 
-/posts/2020-06-04-aws-vpc-flowlog-kinesis-athena/
+https://www.linuxer.name/posts/2020-06-04-aws-vpc-flowlog-kinesis-athena/
 
 현재에는 이런 방법을 사용하지 않는다.
 

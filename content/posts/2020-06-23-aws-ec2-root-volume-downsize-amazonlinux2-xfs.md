@@ -11,7 +11,7 @@ aliases:
 ---
 
 
-/posts/2020-06-23-aws-ec2-root-volume-downsize-amazonlinux1-ext4/
+https://www.linuxer.name/posts/2020-06-23-aws-ec2-root-volume-downsize-amazonlinux1-ext4/
 
 작업의 흐름은 위 포스팅을 참고하기 바란다.
 

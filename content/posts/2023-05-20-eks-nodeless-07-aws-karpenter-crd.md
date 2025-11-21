@@ -12,7 +12,7 @@ aliases:
 
 이제 카펜터의 CRD를 정리하고 어떻게 사용해야 하는지 이야기를 해보려고 한다. 거의 끝에 다왔다.
 
-/posts/2023-05-15-eks-nodeless-05-aws-karpenter-component/
+https://www.linuxer.name/posts/2023-05-15-eks-nodeless-05-aws-karpenter-component/
 
 Karpenter Component 를 설명할때 CRD를 설명했었다.
 

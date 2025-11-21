@@ -16,7 +16,7 @@ aliases:
 
 바로잡은 내용은 아래의 글입니다.
 
-/posts/2022-02-28-linux-stdin-stdout-stderr-2/
+https://www.linuxer.name/posts/2022-02-28-linux-stdin-stdout-stderr-2/
 
 리눅스에서 stderr 으로 받는 문자열은 grep이 되지 않는다.
 
