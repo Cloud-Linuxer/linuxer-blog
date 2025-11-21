@@ -16,16 +16,20 @@
     {{- partialCached "header.html" . .Page -}}
 
     <div class="main-wrapper" style="display: flex; max-width: 1200px; margin: 0 auto; padding: 0 16px;">
+        <!-- Main content area -->
+        <main class="main" style="flex: 1; min-width: 0;">
+            {{- block "main" . }}{{ end }}
+        </main>
+
         <!-- Sidebar for Categories -->
         <aside class="sidebar" style="
             width: 250px;
-            margin-right: 24px;
+            margin-left: 24px;
             position: sticky;
             top: 80px;
             height: fit-content;
             max-height: calc(100vh - 100px);
             overflow-y: auto;
-            order: 0;
         ">
             <div class="sidebar-content" style="
                 background: var(--entry);
@@ -99,11 +103,6 @@
                 </div>
             </div>
         </aside>
-
-        <!-- Main content area -->
-        <main class="main" style="flex: 1; min-width: 0; order: 1;">
-            {{- block "main" . }}{{ end }}
-        </main>
     </div>
 
     {{ if (not site.Params.disableScrollToTop) }}
