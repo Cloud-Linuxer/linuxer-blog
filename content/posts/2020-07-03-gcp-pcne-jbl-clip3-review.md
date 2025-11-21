@@ -15,7 +15,7 @@ aliases:
 
 해야지 해야지 하고 미루고 미루다 드디어 오늘 PCNE를 취득하고 난 다음 받은 굿즈를 인증겸 리뷰겸 하려 한다.
 
-https://www.linuxer.name/posts/2020-04-18-gcp-professional-cloud-network-engineer-pcne-review/
+https://www.linuxer.name/posts/gcp-professional-cloud-network-engineer-pcne-review/
 
 PCNE 리뷰는 위의 글을 참고하자.
 

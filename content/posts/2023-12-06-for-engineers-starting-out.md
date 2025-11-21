@@ -11,7 +11,7 @@ aliases:
 ---
 
 
-https://www.linuxer.name/posts/2020-12-26-시작하는-엔지니어를-위해-2/
+https://www.linuxer.name/posts/시작하는-엔지니어를-위해-2/
 
 시작하는 엔지니어를 위한 글을 쓴지 벌써 3년이 지났습니다.
 

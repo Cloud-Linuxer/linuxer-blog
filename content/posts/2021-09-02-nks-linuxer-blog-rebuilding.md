@@ -13,7 +13,7 @@ aliases:
 
 블로그를 새로 만들기로 했다.
 
-<https://www.linuxer.name/posts/2020-02-04-aws-linuxer의-블로그-톺아보기/>
+<https://www.linuxer.name/posts/aws-linuxer의-블로그-톺아보기/>
 
 2020년 2월에 완성된 블로그의 구조이니..이걸 우려먹은지도 벌써 1년이 훌쩍넘어다는 이야기다. 블로그를 좀더 가볍고 편한구조로 변경하려고 고민했으나..나는 실패했다.ㅠㅠ
 

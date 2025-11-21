@@ -11,7 +11,7 @@ aliases:
 ---
 
 
-https://www.linuxer.name/posts/2020-06-23-aws-ec2-root-volume-resize-extending-linux/
+https://www.linuxer.name/posts/aws-ec2-root-volume-resize-extending-linux/
 
 위에서 확장한 볼륨을 축소 할거다.
 

@@ -37,7 +37,7 @@ SCS는 IAM / Policy / KMS 가 비중이 높다.
 
 공부하면서 개념정리를 위해 작성한 노트는 링크를 확인하시길.
 
-https://www.linuxer.name/posts/2020-05-06-aws-scs-note/
+https://www.linuxer.name/posts/aws-scs-note/
 
 ![](/images/2020/05/image-3-1024x705.png)
 

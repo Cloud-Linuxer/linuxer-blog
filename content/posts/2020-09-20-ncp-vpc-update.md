@@ -29,7 +29,7 @@ TMI는 여기 까지고 VPC를 생성해 보겠습니다.
 
 ![](/images/2020/09/image-21-1024x628.png)
 
-https://www.linuxer.name/posts/2020-05-07-aws-vpc/
+https://www.linuxer.name/posts/aws-vpc/
 
 아직 none-rfc-1918은 지원하지 않습니다. 다른 벤더에서도 rfc1918을 쓰는것을 권장하지만, none-rfc-1918의 필요성이 가끔 있으므로 차차 업데이트 되지 않을까 생각됩니다.
 
