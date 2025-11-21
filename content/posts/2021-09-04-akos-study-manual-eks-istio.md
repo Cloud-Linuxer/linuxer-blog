@@ -18,7 +18,7 @@ eksctl create cluster --vpc-public-subnets $WKSubnets --name $CLUSTER_NAME --reg
 ```
 EKS를 Setup 하는 과정에 대해선 이전포스팅을 참고하기 바란다.
 
-https://linuxer.name/2021/08/akos-study-manual-eks-setup/
+/posts/2021-08-28-akos-study-manual-eks-setup/
 
 간단한 실습이 있지만..음 istio는 못참지.
 
