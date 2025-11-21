@@ -26,7 +26,7 @@ eksctl create fargateprofile \\
     --cluster my-cluster \\
     --name kube-system \\
     --namespace kube-system
-```bash
+```
 다음과 같이 생성해 주면된다. 그럼 kube-system namespace로 스케줄링되는 Pod는 Fargate로 생성되게 된다.
 
 그다음은 CoreDNS를 패치하고 재시작하면된다.
@@ -41,5 +41,5 @@ kubectl patch deployment coredns -n kube-system --type=json -p='[{"op": "remove"
 ```text
  k get pod -o wide NAME                      READY   STATUS    RESTARTS   AGE     IP              NODE                                                       NOMINATED NODE   READINESS GATES coredns-fd69467b9-bsh88   1/1     Running   0          5h18m   192.168.13.23   fargate-ip-192-168-13-23.ap-northeast-2.compute.internal   <none>           <none> coredns-fd69467b9-gn24k   1/1     Running   0          5h18m   192.168.12.34   fargate-ip-192-168-12-34.ap-northeast-2.compute.internal   <none>           <none>
 
-```bash
+```
 다음과 같이 스케줄링되면 정상적으로 배포 된것이다.

@@ -35,7 +35,7 @@ Rancher 2.4버전까진 privileged모드에 대한 안내가 없지만 2.5버전
 
 ```bash
 #kubelet --allowed-unsafe-sysctls
-```bash
+```
 에 대한 이야기다. 한창 K8S의 성능에 대한 고민이 많던 시기다.
 이때에 쿠버네티스 네트워킹에 대해서 한창 많은 공부를 했던것 같다.
 
@@ -75,7 +75,7 @@ cat /var/lib/kubelet/kubelet.conf apiVersion: kubelet.config.k8s.io/v1beta1 auth
 
 ```yaml
 allowed-unsafe-sysctls: - net.core.netdev_max_backlog - net.core.somaxconn
-```bash
+```
 설정을 추가했다. 이제 프로세스를 새시작하고 테스트 했다.
 
 ```bash
@@ -87,7 +87,7 @@ allowed-unsafe-sysctls: - net.core.netdev_max_backlog - net.core.somaxconn
 systemctl status kubelet.service
 ● kubelet.service - Kubernetes Kubelet Server
      Loaded: loaded (/lib/systemd/system/kubelet.service; enabled; vendor preset: enabled)
-```bash
+```
 보면 서비스 경로가 보인다. 이안에 kubelet을 시작하기 위한 경로들이 모여있다.
 
 ```ini
@@ -101,7 +101,7 @@ systemctl status kubelet.service
 cat /etc/sysconfig/kubelet
 DAEMON_ARGS="--anonymous-auth=false --authentication-token-webhook=true --authorization-mode=Webhook --cgroup-driver=systemd --cgroup-root=/ --client-ca-file=/srv/kubernetes/ca.crt --cloud-provider=external --cluster-dns=169.254.20.10 --cluster-domain=cluster.local --enable-debugging-handlers=true --eviction-hard=memory.available<100Mi,nodefs.available<10%,nodefs.inodesFree<5%,imagefs.available<10%,imagefs.inodesFree<5% --feature-gates=CSIMigrationAWS=true,InTreePluginAWSUnregister=true --hostname-override=i-0a7504d19e11fb642 --kubeconfig=/var/lib/kubelet/kubeconfig --max-pods=100 --pod-infra-container-image=registry.k8s.io/pause:3.6@sha256:3d380ca8864549e74af4b29c10f9cb0956236dfb01c40ca076fb6c37253234db --pod-manifest-path=/etc/kubernetes/manifests --protect-kernel-defaults=true --register-schedulable=true --resolv-conf=/run/systemd/resolve/resolv.conf --v=2 --volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ --cloud-config=/etc/kubernetes/in-tree-cloud.config --node-ip=172.30.52.244 --runtime-request-timeout=15m --container-runtime-endpoint=unix:///run/containerd/containerd.sock --tls-cert-file=/srv/kubernetes/kubelet-server.crt --tls-private-key-file=/srv/kubernetes/kubelet-server.key --config=/var/lib/kubelet/kubelet.conf" HOME="/root"
 
-```bash
+```
 여기 DAEMON_ARGS 뒤에 --allowed-unsafe-sysctls 'kernel.msg\*,net.core.somaxconn' 를 추가해준다.
 
 재시작 까지하면 프로세스에 추가된 파라미터가 보인다.
@@ -112,7 +112,7 @@ ps afxuwww | grep unsafe root       27576  0.0  0.0   8168   656 pts/0    S+   1
 ```bash
 # k events
 5s                      Normal    NodeAllocatableEnforced   Node/i-0a7504d19e11fb642   Updated Node Allocatable limit across pods 4s                       Normal    Scheduled                 Pod/unsafe                 Successfully assigned default/unsafe to i-0a7504d19e11fb642 3s                       Normal    Pulling                   Pod/unsafe                 Pulling image "centos:7" k get pod NAME     READY   STATUS    RESTARTS   AGE unsafe   1/1     Running   0          20s
-```bash
+```
 정상적으로 스케줄링된것이 보인다.
 
 이로서 unsafe 파라미터를 영구적으로 적용할수 있게되었다.

@@ -30,7 +30,7 @@ metadata:
   name: service
   annotations:
     service.kubernetes.io/topology-aware-hints: auto
-```bash
+```
 다음과 같은 annotations 붙어있어야 한다.
 
 그럼먼저 우리는 Provisioner가 자동으로 노드를 Deprovisioning 하도록 설정하자.
@@ -91,7 +91,7 @@ spec:
         maxSkew: 5
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
-```bash
+```
 topologyKey: kubernetes.io/zone maxSkew: 2는 하나의 호스트 즉 노드간 파드의 차이는 maxSkew: 2 를 초과할수 없다. topologyKey: topology.kubernetes.io/zone maxSkew: 5 zone 간 pod의 갯수는 maxSkew: 5 초과 할수 없으므로 하나의 zone에서만 pod가 스케줄링된다면 20개의 replicas 를 요청한다 해도 5개의 pod 만 스케줄링 된다.
 
 AZ별로 제공하는 유형의 인스턴스 페일리가 달라서 특정 유형만 사용하려고 하면 프로비저닝 조건에 걸려서 스케줄링이 쉽지 않다.
@@ -114,7 +114,7 @@ zone=ap-northeast-2b
 zone=ap-northeast-2b
 zone=ap-northeast-2b
 zone=ap-northeast-2c
-```bash
+```
 다음과같이 노드가 a 3대 b 3대 c 1대 스케줄링 되면 모두 14개의 pod가 스케줄링된다. C zone때문에 두번째 조건에 걸리기 때문이다. 다양한 조건을 사용하면 이와 같이 균등하게 zone 에 스케줄링 하긴 어려운점이 있다. 적당히 조건을 걸어주면 잘 작동한다.
 
 ```yaml
@@ -158,7 +158,7 @@ zone=ap-northeast-2a
 zone=ap-northeast-2b
 zone=ap-northeast-2b
 zone=ap-northeast-2c
-```bash
+```
 AZ 별로 균등하게 node를 프로비저닝 해야하는 방법이 필요하다.
 
 <https://github.com/aws/karpenter/issues/2572>

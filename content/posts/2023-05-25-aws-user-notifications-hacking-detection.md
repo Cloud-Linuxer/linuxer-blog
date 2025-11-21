@@ -30,7 +30,7 @@ aliases:
 
 ```text
 [af-south-1, ap-east-1, ap-southeast-4, ap-southeast-3, ap-south-2, eu-south-1, eu-south-2, eu-central-2, me-south-1, me-central-1]
-```bash
+```
 리전선택하고 이메일 넣고 생성해 주자
 
 ![](/images/2023/05/image-7.png)

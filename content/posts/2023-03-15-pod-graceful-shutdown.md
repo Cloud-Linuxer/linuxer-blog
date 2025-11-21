@@ -29,7 +29,7 @@ aliases:
             preStop:
               exec:
                 command: ["/bin/sleep", "30"]
-```bash
+```
 
 .
 

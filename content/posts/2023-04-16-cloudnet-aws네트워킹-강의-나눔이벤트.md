@@ -26,7 +26,7 @@ def select_random_winner(filename):
     winner = random.choice(names).strip()
     return winner
 filename = "name_list.txt" winner = select_random_winner(filename) print(f"축하합니다! 상품 당첨자는 {winner}님입니다!")
-```bash
+```
 랜덤으로 코드만들어서 돌렸다.
 
 ```text

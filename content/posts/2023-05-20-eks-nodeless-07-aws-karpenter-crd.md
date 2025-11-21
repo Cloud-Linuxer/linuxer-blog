@@ -34,7 +34,7 @@ apiVersion: karpenter.sh/v1alpha5 kind: Provisioner metadata:
       values: ["2"]
   providerRef:
     name: default
-```bash
+```
 <https://karpenter.sh/v0.27.3/concepts/provisioners/>
 
 <https://github.com/aws/karpenter/tree/main/examples>

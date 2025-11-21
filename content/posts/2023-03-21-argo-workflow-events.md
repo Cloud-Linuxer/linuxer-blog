@@ -44,7 +44,7 @@ Argo 를 이용한 CI의 길은 친절하지 않다. 먼저 WorkFlow 설치는 �
 ```text
 k create ns argo k apply -f Argo-WorkFlow-install.yaml
 customresourcedefinition.apiextensions.k8s.io/clusterworkflowtemplates.argoproj.io created customresourcedefinition.apiextensions.k8s.io/cronworkflows.argoproj.io created customresourcedefinition.apiextensions.k8s.io/workflowartifactgctasks.argoproj.io created customresourcedefinition.apiextensions.k8s.io/workfloweventbindings.argoproj.io created customresourcedefinition.apiextensions.k8s.io/workflows.argoproj.io created customresourcedefinition.apiextensions.k8s.io/workflowtaskresults.argoproj.io created customresourcedefinition.apiextensions.k8s.io/workflowtasksets.argoproj.io created customresourcedefinition.apiextensions.k8s.io/workflowtemplates.argoproj.io created serviceaccount/argo created serviceaccount/argo-server created role.rbac.authorization.k8s.io/argo-role created clusterrole.rbac.authorization.k8s.io/argo-aggregate-to-admin created clusterrole.rbac.authorization.k8s.io/argo-aggregate-to-edit created clusterrole.rbac.authorization.k8s.io/argo-aggregate-to-view created clusterrole.rbac.authorization.k8s.io/argo-cluster-role created clusterrole.rbac.authorization.k8s.io/argo-server-cluster-role created rolebinding.rbac.authorization.k8s.io/argo-binding created clusterrolebinding.rbac.authorization.k8s.io/argo-binding created clusterrolebinding.rbac.authorization.k8s.io/argo-server-binding created configmap/workflow-controller-configmap created service/argo-server created priorityclass.scheduling.k8s.io/workflow-controller created deployment.apps/argo-server created deployment.apps/workflow-controller created
-```bash
+```
 CRD부터 SA role 등등 마지막으로 2개의 deployment를 만든다. 그럼 내가 추가한 설정이 잘추가 됬는 지 확인하고 싶다면 argo-server 의 시작 로그를 확인한다.
 
 ```text
@@ -66,7 +66,7 @@ Argo 프로젝트로 CI를 하기위해선 WF만으로는 할수없다. Events �
 ```text
  k apply -f Argo-Events-install.yaml
 customresourcedefinition.apiextensions.k8s.io/eventbus.argoproj.io created customresourcedefinition.apiextensions.k8s.io/eventsources.argoproj.io created customresourcedefinition.apiextensions.k8s.io/sensors.argoproj.io created serviceaccount/argo-events-sa created clusterrole.rbac.authorization.k8s.io/argo-events-aggregate-to-admin created clusterrole.rbac.authorization.k8s.io/argo-events-aggregate-to-edit created clusterrole.rbac.authorization.k8s.io/argo-events-aggregate-to-view created clusterrole.rbac.authorization.k8s.io/argo-events-role created clusterrolebinding.rbac.authorization.k8s.io/argo-events-binding created configmap/argo-events-controller-config created deployment.apps/controller-manager created
-```bash
+```
 <https://github.com/Cloud-Linuxer/Argo-test/blob/main/Argo-EventsBus.yaml>
 
 이벤트 버스는 Argo-Event 를 하면서 가장 인상적인 아키텍처였다.
@@ -80,7 +80,7 @@ eventbus.argoproj.io/default created
 ```text
  k get pod NAME                                  READY   STATUS    RESTARTS   AGE argo-server-5779fd7868-nb77l          0/1     Running   0          25m controller-manager-78bbd4559b-sd28w   1/1     Running   0          3m53s eventbus-default-stan-0               2/2     Running   0          72s eventbus-default-stan-1               2/2     Running   0          63s eventbus-default-stan-2               2/2     Running   0          54s workflow-controller-5f7f4d8-96bnm     1/1     Running   0          25m
 
-```bash
+```
 세개의 이벤트 버스가 pod 로 뜨고,
 
 ![](/images/2023/03/image-1-1024x418.png)
@@ -134,7 +134,7 @@ git webhook을 이용한 간단한 테스트 정도만 이어 갈거다 걱정�
 ```text
  # sensor rbac k apply -f https://raw.githubusercontent.com/argoproj/argo-events/master/examples/rbac/sensor-rbac.yaml
  # workflow rbac k apply -f https://raw.githubusercontent.com/argoproj/argo-events/master/examples/rbac/workflow-rbac.yaml
-```bash
+```
 나는 이 RBAC를 적용하면서 사실 살짝 현타가 왔다. CRD의 모든 동작을 알순없더라도 적어도 내가 통제할수는 있는 레벨이어야 하는데 너무 쪼개진 컴포넌트 들이 나를 힘들게 했다.
 
 자 그럼 이제 이벤트소스-웹훅-센서-트리거 를 배포해 보자.
@@ -165,7 +165,7 @@ NAME                              TYPE        CLUSTER-IP       EXTERNAL-IP   POR
 k get eventsources.argoproj.io
 NAME      AGE webhook   10m
 
-```bash
+```
 eventsource-name=webhook label 이 붙는다. owner나 이런 저런것도 붙는다.
 
 ![](/images/2023/03/image-3.png)
@@ -190,7 +190,7 @@ sensor.argoproj.io/webhook created
 ```text
 k get svc NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE argo-server                 ClusterIP   100.68.95.174    <none>        2746/TCP                     37m eventbus-default-stan-svc   ClusterIP   None             <none>        4222/TCP,6222/TCP,8222/TCP   64m webhook-eventsource-svc     ClusterIP   100.64.116.226   <none>        12000/TCP                    14m
 
-```bash
+```
 Service를 보면 webhook-eventsource-svc Eventsource 가 있다. 이걸 Ingress 로 연결해야한다. Ingress 를 생성하면 이런식으로 두개의 Ingress 가 생긴다.
 
 ```text
@@ -200,7 +200,7 @@ k get ingress NAME                       CLASS   HOSTS   ADDRESS                
 
 ```bash
 curl -d '{"message":"this is my first webhook"}' -H "Content-Type: application/json" -X POST http://k8s-argo-argoeven-44fe46d880-57919429.ap-northeast-2.elb.amazonaws.com success
-```bash
+```
 success가 떨어질것이다. 그럼 정상적으로 실행됬는지 UI에서 확인해보자.
 
 ![](/images/2023/03/image-5-1024x288.png)
@@ -225,7 +225,7 @@ k get wf NAME            STATUS      AGE   MESSAGE webhook-9vzcz   Succeeded   8
 ```text
 k get pod | grep webhook webhook-4j9gq                                0/2     Completed   0          108s webhook-4q646                                0/2     Completed   0          101s webhook-6k44h                                0/2     Completed   0          96s webhook-96w4x                                0/2     Completed   0          106s webhook-9vzcz                                0/2     Completed   0          3m58s webhook-blmsq                                0/2     Completed   0          107s webhook-eventsource-r7x58-8575c749bb-fsjnf   1/1     Running     0          26m webhook-fq6d5                                0/2     Completed   0          102s webhook-fzh2t                                0/2     Completed   0          103s webhook-g58r9                                0/2     Completed   0          103s webhook-gk9wb                                0/2     Completed   0          98s webhook-mh6b2                                0/2     Completed   0          104s webhook-mm9qx                                0/2     Completed   0          105s webhook-n9x4k                                0/2     Completed   0          106s webhook-nhd8l                                0/2     Completed   0          109s webhook-ps8z6                                0/2     Completed   0          109s webhook-qnnbd                                0/2     Completed   0          100s webhook-qrm8d                                0/2     Completed   0          97s webhook-rcztl                                0/2     Completed   0          98s webhook-sensor-lqv7w-6459d75dbb-xlkh8        1/1     Running     0          13m webhook-vs2tm                                0/2     Completed   0          99s webhook-xtfbh                                0/2     Completed   0          104s webhook-z6twq                                0/2     Completed   0          108s
 
-```bash
+```
 늘어난다.
 
 나는 이다음 github webhook과 인증인가 Ingress 보호등 다양한 부분을 확인하고 테스트했다. 그이후엔 셀프로 이걸 관리하면서 사용할거라면 안하는게 맞다는 결론을 내렸다.

@@ -43,7 +43,7 @@ Docker를 사용하기 위해선 6개의 패키지가 필요하다.
 (6/6): docker-1.13.1-162.git64e9980.el7.centos.x86_64.rpm
 |  18 MB  00:00:00
 
-```bash
+```
 docker 만 설치해도 의존성으로 도커를 사용하기위한 패키지를 설치해준다.
 아이러니 하게 yum remove docker 로 삭제하면 docker는 그냥혼자 지워진다. 설치할땐 패거리로 오고 갈땐 혼자간다. 구버전이라 패키지 네이밍도 좀 올드 하다.
 
@@ -81,7 +81,7 @@ docker run -d -p 8080:80 ngnix 명령어로 도커를 실행했다.
 [root@linuxer ~ ]# ps afxuwww
 /usr/bin/containerd-shim-runc-v2 -namespace moby -id
 |- nginx: master process nginx -g daemon off; |- nginx: worker process |- nginx: worker process
-```bash
+```
 ps afxuwww 명령어에서 보기쉽게 트리만 떼온 상태다. containerd-shim-runc 데몬이 nginx를 실행중인것을 알 수 있다. 이것만으로도 컨테이너는 프로세스다. 라는것을 알수있다.
 
 이렇기에 컨테이너는 불 안정함을 띄고 있고, 취약한 부분이 있다.
@@ -110,7 +110,7 @@ CMD ["php-fpm", "-f", "&", "nginx", "-g", "daemon", "off"]
 ```bash
 [root@linuxer ~ ]# cat start.sh
 #!/bin/bash set -m /opt/remi/php80/root/usr/sbin/php-fpm --nodaemonize \\ --fpm-config /etc/opt/remi/php80/php-fpm.conf & \\ /usr/sbin/nginx fg %1
-```bash
+```
 다른사람들에게 팁을 얻으려고 했으나, 안티 패턴인지 딱히 다들 말이없었다. 컨테이너이므로 쪼개 라는 대답을 얻었다. 나도 알고있는 부분인지라 사실 쪼갤까 했지만 일단 스크립트를 써서 완성을 했다.
 
 이렇게 완성한 컨테이너 를 실행해 보면
