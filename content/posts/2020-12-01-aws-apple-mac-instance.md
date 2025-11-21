@@ -49,9 +49,9 @@ Maximum number of running dedicated mac1 hosts.
 
 한방에 인스턴스가 전용호스트를 다 차지한다.
 
-```bash
+```
 ssh -i linuxer.pem ec2-user@IP
-```bash
+```
 .
 
 ssh는 동일하게 ec2-user 계정으로 접근한다.
@@ -62,17 +62,17 @@ SSM을 이용한접근도 가능하다.
 
 먼저 vnc 로 접근하는게 목적이므로brew로 vnc server 를 셋팅해야한다.
 
-```bash
+```
 sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -allowAccessFor -allUsers -privs -all sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -clientopts -setvnclegacy -vnclegacy yes
 sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -clientopts -setvncpw -vncpw supersecret sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -restart -agent -console sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate
-```bash
+```
 <https://gist.github.com/nateware/3915757>
 
 귀찮아서 이페이지 복붙했다. 위 명령어를 치면 vnc 가활성화 된다.
 
-```bash
+```
 sudo dscl . -passwd /Users/ec2-user
-```bash
+```
 .
 
 명령어로 ec2-user의 패스워드를 설정한다.

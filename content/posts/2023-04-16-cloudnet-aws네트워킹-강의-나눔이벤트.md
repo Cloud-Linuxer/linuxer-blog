@@ -18,7 +18,7 @@ aliases:
 
 총 60분이 참여해주셨고, 간단하게 코드를 짰다.
 
-```bash
+```
 import random
 def select_random_winner(filename):
     with open(filename, 'r', encoding='utf-8') as file:
@@ -26,12 +26,12 @@ def select_random_winner(filename):
     winner = random.choice(names).strip()
     return winner
 filename = "name_list.txt" winner = select_random_winner(filename) print(f"축하합니다! 상품 당첨자는 {winner}님입니다!")
-```bash
+```
 랜덤으로 코드만들어서 돌렸다.
 
-```bash
+```
 python3 select_random_winner.py 축하합니다! 상품 당첨자는 김신님입니다!
-```bash
+```
 ![](/images/2023/04/image-2.png)
 
 김신님께서 당첨되셨다.

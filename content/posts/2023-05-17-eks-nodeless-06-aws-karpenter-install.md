@@ -19,18 +19,18 @@ aliases:
 
 karpenter 를 설치하기 전에 먼저 셋팅해야 할것들이 있다.
 
-```bash
+```
 CLUSTER_NAME=myeks # your clouster name AWS_PARTITION="aws" # aws or aws-gov or aws-cn AWS_REGION="$(aws configure list | grep region | tr -s " " | cut -d" " -f3)" OIDC_ENDPOINT="$(aws eks describe-cluster --name ${CLUSTER_NAME} \\
     --query "cluster.identity.oidc.issuer" --output text)" AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' \\
     --output text) export KARPENTER_VERSION=v0.27.3 # latast version
-```bash
+```
 환경 변수 설정이다.
 
 클러스터 이름 / 리전 / OIDC ENDPOINT / 어카운트 넘버 / karpenter 버전이 그것이다.
 
 Karpenter 를 설치할때는 많은 권한을 요구로 한다.
 
-```bash
+```
 echo '{
     "Version": "2012-10-17",
     "Statement": [
@@ -123,7 +123,7 @@ EOF
 aws iam put-role-policy --role-name KarpenterControllerRole-${CLUSTER_NAME} \\
     --policy-name KarpenterControllerPolicy-${CLUSTER_NAME} \\
     --policy-document file://controller-policy.json
-```bash
+```
 환경 설정과 적절한 권한이 주어져 있다면 이과정에서 에러는 나지 않는다.
 
 IAM까지 했다면 거의 다한거다.
@@ -146,7 +146,7 @@ IAM에는 KarpenterNodeRole 을 만들고 권한부여하고 KarpenterNodeInstan
 
 이렇게 진행했다면 이제 Karpenter 에서 프로비저닝한 노드가 클러스터에 Join이 가능하도록 허용해줘야 한다.
 
-```bash
+```
 kubectl edit configmap aws-auth -n kube-system apiVersion: v1 data:
   mapRoles: |
 
@@ -155,12 +155,12 @@ kubectl edit configmap aws-auth -n kube-system apiVersion: v1 data:
     - system:nodes
     rolearn: arn:aws:iam::${AWS_ACCOUNT_ID}:role/KarpenterNodeRole-${CLUSTER_NAME}
     username: system:node:{{EC2PrivateDNSName}}
-```bash
+```
 mapRoles 아래에 넣는다. 변수부분 수정해서 넣어야한다.
 
 이제 드디어 카펜터를 설치한다. 이과정에는 헬름이 필수다.
 
-```bash
+```
  helm template karpenter oci://public.ecr.aws/karpenter/karpenter \\
   --version ${KARPENTER_VERSION} \\
  --namespace karpenter   \\
@@ -173,28 +173,28 @@ mapRoles 아래에 넣는다. 변수부분 수정해서 넣어야한다.
  --set controller.resources.requests.memory=1Gi     \\
  --set controller.resources.limits.cpu=1     \\
  --set controller.resources.limits.memory=1Gi > karpenter.yaml
-```bash
+```
 settings.aws.clusterName / clusterName 이두가지 옵션은 다른옵션이다. 헷갈리지 말자.
 
 우리는 NodeLess 를 진행중이기 때문에 여기서 Karpneter 가이드와 다르게 간다.
 
-```bash
+```
 aws eks create-fargate-profile --fargate-profile-name karpenter --cluster-name myeks --pod-execution-role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/AmazonEKSFargatePodExecutionRole --subnets "subnet-1" "subnet-2" "subnet-3"
-```bash
+```
 이렇게 karpenter Fargate Profile을 생성하였다면 이제 Karpenter의 컴포넌트와 CRD를 같이 배포해줄 때다.
 
-```bash
+```
 kubectl create namespace karpenter kubectl create -f \\
   https://raw.githubusercontent.com/aws/karpenter/${KARPENTER_VERSION}/pkg/apis/crds/karpenter.sh_provisioners.yaml kubectl create -f \\
     https://raw.githubusercontent.com/aws/karpenter/${KARPENTER_VERSION}/pkg/apis/crds/karpenter.k8s.aws_awsnodetemplates.yaml kubectl apply -f karpenter.yaml
 
-```bash
+```
 이렇게 배포하면 파게이트에 배포된 Karpenter 를 만날수 있다.
 
-```bash
+```
 k get pod -o wide NAME                         READY   STATUS    RESTARTS   AGE   IP               NODE                                                        NOMINATED NODE   READINESS GATES karpenter-5bffc6f5d8-p2pxh   1/1     Running   0          9d    192.168.12.183   fargate-ip-192-168-12-183.ap-northeast-2.compute.internal   <none>           <none> karpenter-5bffc6f5d8-qgcwn   1/1     Running   0          9d    192.168.13.157   fargate-ip-192-168-13-157.ap-northeast-2.compute.internal   <none>           <none>
 
-```bash
+```
 Karpenter는 버전에 따라 Pod내에 Container 가 2개인 경우가 있다. 이경우엔 컨트롤러와 웹훅용도의 컨테이너가 두개가 동작한다. 일정버전 이상에서만 Fargate에 프로비저닝 된다. 그냥 v0.27.3버전 이상쓰자.
 
 하다가 안되면 대부분 유저 문제다.

@@ -15,7 +15,7 @@ aliases:
 
 먼저 프로메테우스를 설치한다.
 
-```bash
+```
 cat << EOF | k apply -f -
  ---
  apiVersion: v1
@@ -107,14 +107,14 @@ cat << EOF | k apply -f -
    sessionAffinity: None
    type: LoadBalancer
  EOF
-```bash
+```
 <https://grafana.com/docs/grafana/latest/installation/kubernetes/>
 
 설치는 위링크를 참조하고 grafana svc type 만 LoadBalancer 로 변경한다.
 
-```bash
+```
 k get svc NAME         TYPE           CLUSTER-IP       EXTERNAL-IP                                                                   PORT(S)          AGE grafana      LoadBalancer   172.20.237.228   af7fa7486f6eb4ad4a6bde897210f4a9-206885623.ap-northeast-2.elb.amazonaws.com   3000:32317/TCP   32m
-```bash
+```
 그라파나의 서비스가 다만들어지면 URL로 접근이 가능하다.
 
 ![](/images/2021/09/image-10-1024x967.png)
